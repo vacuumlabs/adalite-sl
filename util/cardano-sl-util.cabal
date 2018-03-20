@@ -37,11 +37,12 @@ library
                        Pos.Util.Limits
                        Pos.Util.LRU
                        Pos.Util.Modifier
-                       Pos.Util.OptParse
                        Pos.Util.Orphans
+                       Pos.Util.OptParse
                        Pos.Util.Queue
                        Pos.Util.Some
                        Pos.Util.Timer
+                       Pos.Util.Trace
                        Pos.Util.Util
 
   other-modules:
@@ -58,6 +59,7 @@ library
                      , cereal
                      , containers
                      , concurrent-extra
+                     , contravariant
                      , cryptonite
                      , data-default
                      , deepseq
@@ -72,7 +74,6 @@ library
                      , log-warper >= 1.0.3
                      , lrucache
                      , megaparsec
-                     , mmorph
                      , mtl
                      , optparse-applicative
                      , parsec
