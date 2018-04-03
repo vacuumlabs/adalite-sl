@@ -21,7 +21,7 @@ module UTxO.Interpreter (
   , Interpret(..)
   ) where
 
-import           Universum
+import           Universum hiding (id)
 
 import           Control.Arrow ((&&&))
 import           Data.Default (def)
@@ -30,8 +30,6 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Text.Buildable
 import           Formatting (bprint, shown)
 import           Prelude (Show (..))
-
-import           Cardano.Wallet.Kernel.Types
 
 import           Pos.Block.Logic
 import           Pos.Client.Txp

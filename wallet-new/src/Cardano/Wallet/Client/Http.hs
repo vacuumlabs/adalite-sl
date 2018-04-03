@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Cardano.Wallet.Client.Http
     ( module Cardano.Wallet.Client.Http
       -- * Abstract Client export
@@ -12,7 +14,7 @@ import           Universum
 import           Control.Lens (_Left)
 import           Network.HTTP.Client (Manager, defaultManagerSettings, newManager)
 import           Servant ((:<|>) (..), (:>))
-import           Servant.Client (BaseUrl (..), ClientEnv (..), Scheme (..), client, runClientM)
+import           Servant.Client (BaseUrl (..), ClientEnv (..), Scheme (..), ClientM, client, runClientM)
 
 import qualified Cardano.Wallet.API.V1 as V1
 import           Cardano.Wallet.Client
@@ -72,9 +74,14 @@ mkHttpClient baseUrl manager = WalletClient
     }
 
   where
+
+    -- Must give the type. GHC will not infer it to be polymorphic in 'a'.
+    run :: forall a . ClientM a -> IO (Either ClientError a)
+    run = fmap (over _Left ClientHttpError) . (`runClientM` clientEnv)
+
     unNoContent = map void
-    clientEnv = ClientEnv manager baseUrl
-    run       = fmap (over _Left ClientHttpError) . (`runClientM` clientEnv)
+    cookieJar = Nothing
+    clientEnv = ClientEnv manager baseUrl cookieJar
     getAddressIndexR
         :<|> postAddressR
         :<|> getAddressR
