@@ -103,17 +103,19 @@ onApplyBlocksWebWallet blunds = setLogger . reportTimeouts "apply" $ do
         -> CId Wal
         -> m ()
     syncWallet db ws curTip newTipH blkTxsWUndo wAddr = walletGuard ws curTip wAddr $ do
-        blkHeaderTs <- blkHeaderTsGetter
-        encSK <- getSKById wAddr
+        getSKById wAddr >>= \case
+            Nothing    -> return () -- No secret key, it means that this wallet is external one.
+            Just encSK -> do
+                blkHeaderTs <- blkHeaderTsGetter
 
-        let credentials = eskToWalletDecrCredentials encSK
-        let dbUsed = WS.getCustomAddresses ws WS.UsedAddr
-        let applyBlockWith trackingOp = do
-              let mapModifier = trackingApplyTxs credentials dbUsed gbDiff blkHeaderTs ptxBlkInfo blkTxsWUndo
-              applyModifierToWallet db trackingOp wAddr newTipH mapModifier
-              logMsg "Applied" (getOldestFirst blunds) wAddr mapModifier
+                let credentials = eskToWalletDecrCredentials $ Just encSK
+                let dbUsed = WS.getCustomAddresses ws WS.UsedAddr
+                let applyBlockWith trackingOp = do
+                      let mapModifier = trackingApplyTxs credentials dbUsed gbDiff blkHeaderTs ptxBlkInfo blkTxsWUndo
+                      applyModifierToWallet db trackingOp wAddr newTipH mapModifier
+                      logMsg "Applied" (getOldestFirst blunds) wAddr mapModifier
 
-        applyBlockWith SyncWallet
+                applyBlockWith SyncWallet
 
     gbDiff = Just . view difficultyL
     ptxBlkInfo = \case
@@ -155,16 +157,18 @@ onRollbackBlocksWebWallet blunds = setLogger . reportTimeouts "rollback" $ do
         -> CId Wal
         -> m ()
     syncWallet db ws curTip newTip txs wid = walletGuard ws curTip wid $ do
-        encSK <- getSKById wid
-        blkHeaderTs <- blkHeaderTsGetter
+        getSKById wid >>= \case
+            Nothing    -> return () -- No secret key, it means that this wallet is external one.
+            Just encSK -> do
+                blkHeaderTs <- blkHeaderTsGetter
 
-        let rollbackBlockWith trackingOperation = do
-              let dbUsed = WS.getCustomAddresses ws WS.UsedAddr
-                  mapModifier = trackingRollbackTxs (eskToWalletDecrCredentials encSK) dbUsed gbDiff blkHeaderTs txs
-              rollbackModifierFromWallet db trackingOperation wid newTip mapModifier
-              logMsg "Rolled back" (getNewestFirst blunds) wid mapModifier
+                let rollbackBlockWith trackingOperation = do
+                      let dbUsed = WS.getCustomAddresses ws WS.UsedAddr
+                          mapModifier = trackingRollbackTxs (eskToWalletDecrCredentials $ Just encSK) dbUsed gbDiff blkHeaderTs txs
+                      rollbackModifierFromWallet db trackingOperation wid newTip mapModifier
+                      logMsg "Rolled back" (getNewestFirst blunds) wid mapModifier
 
-        rollbackBlockWith SyncWallet
+                rollbackBlockWith SyncWallet
 
     gbDiff = Just . view difficultyL
 

@@ -20,6 +20,7 @@ import           Data.Time.Units (Second)
 import           Mockable (Concurrently, Delay, Mockable, concurrently, delay)
 import           Servant.Server (err403, err405, errReasonPhrase)
 import           System.Wlog (logDebug)
+import           Formatting (sformat, build, (%))
 
 import           Pos.Client.KeyStorage (getSecretKeys)
 import           Pos.Client.Txp.Addresses (MonadAddresses)
@@ -182,7 +183,11 @@ sendMoney submitTx passphrase moneySource dstDistr policy = do
         throwM err403
         { errReasonPhrase = "Transaction creation is disabled when the wallet is restoring."
         }
-    rootSk <- getSKById srcWallet
+
+    rootSk <- maybe (throwM (RequestError $ sformat ("No source wallet with address "%build%" found") srcWallet))
+                    pure
+                    =<< getSKById srcWallet
+
     checkPassMatches passphrase rootSk `whenNothing`
         throwM (RequestError "Passphrase doesn't match")
 

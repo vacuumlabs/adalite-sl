@@ -152,7 +152,10 @@ txpProcessTxWebWallet tx@(txId, txAux) = do
 
     toThee :: (WithHash Tx, TxUndo) -> Timestamp -> CId Wal -> m (CId Wal, THEntryExtra)
     toThee txWithUndo ts wId = do
-        wdc <- eskToWalletDecrCredentials <$> getSKById wId
+        -- TODO: Check if we have to check external wallet (without secret key) here,
+        -- probably it's related to CHW-85.
+        sk <- maybe (error "TESTME") pure <$> getSKById wId
+        let wdc = eskToWalletDecrCredentials sk
         pure (wId, buildTHEntryExtra wdc txWithUndo (Nothing, Just ts))
 
 txpNormalizeWebWallet :: (TxpLocalWorkMode ctx m, MempoolExt m ~ ()) => m ()

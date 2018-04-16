@@ -49,7 +49,7 @@ myRootAddresses = encToCId <<$>> getSecretKeysPlain
 getSKById
     :: AccountMode ctx m
     => CId Wal
-    -> m EncryptedSecretKey
+    -> m (Maybe EncryptedSecretKey)
 getSKById wid = do
     secrets <- getSecretKeys
     runExceptT (getSKByIdPure secrets wid) >>= eitherToThrow
@@ -58,12 +58,12 @@ getSKByIdPure
     :: MonadError WalletError m
     => AllUserSecrets
     -> CId Wal
-    -> m EncryptedSecretKey
+    -> m (Maybe EncryptedSecretKey)
 getSKByIdPure (AllUserSecrets secrets) wid =
-    maybe (throwError notFound) pure (find (\k -> encToCId k == wid) secrets)
-  where
-    notFound =
-        RequestError $ sformat ("No wallet with address "%build%" found") wid
+    -- Please note that external wallets doesn't have secret keys here,
+    -- because these secret keys are stored externally (for example, in
+    -- memory of hardware wallet).
+    return $ find (\k -> encToCId k == wid) secrets
 
 getSKByAddress
     :: AccountMode ctx m
@@ -184,18 +184,20 @@ deriveAddressSKPure
     -> AccountId
     -> Word32
     -> m (Address, EncryptedSecretKey)
-deriveAddressSKPure secrets scp passphrase AccountId {..} addressIndex = do
-    key <- getSKByIdPure secrets aiWId
-    maybe (throwError badPass) pure $
-        deriveLvl2KeyPair
-            (IsBootstrapEraAddr True) -- TODO: make it context-dependent!
-            scp
-            passphrase
-            key
-            aiIndex
-            addressIndex
+deriveAddressSKPure secrets scp passphrase AccountId {..} addressIndex =
+    getSKByIdPure secrets aiWId >>= \case
+        Nothing  -> throwError noSuchWallet
+        Just key -> maybe (throwError badPass) pure $
+            deriveLvl2KeyPair
+                (IsBootstrapEraAddr True) -- TODO: make it context-dependent!
+                scp
+                passphrase
+                key
+                aiIndex
+                addressIndex
   where
     badPass = RequestError "Passphrase doesn't match"
+    noSuchWallet = RequestError $ sformat ("No wallet with address "%build%" found") aiWId
 
 deriveAddress
     :: AccountMode ctx m
@@ -209,7 +211,7 @@ deriveAddress passphrase accId@AccountId{..} cwamAddressIndex = do
 
 -- | Allows to find a key related to given @id@ item.
 class MonadKeySearch id m where
-    findKey :: id -> m EncryptedSecretKey
+    findKey :: id -> m (Maybe EncryptedSecretKey)
 
 instance AccountMode ctx m => MonadKeySearch (CId Wal) m where
     findKey = getSKById

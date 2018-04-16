@@ -74,12 +74,14 @@ buildTHEntryExtra wdc (WithHash tx txId, NE.toList -> undoL) (mDiff, mTs) =
 
 type WalletDecrCredentials = (HDPassphrase, CId Wal)
 
-eskToWalletDecrCredentials :: EncryptedSecretKey -> WalletDecrCredentials
-eskToWalletDecrCredentials encSK = do
+-- | There's no secret key for external wallets.
+eskToWalletDecrCredentials :: Maybe EncryptedSecretKey -> WalletDecrCredentials
+eskToWalletDecrCredentials (Just encSK) = do
     let pubKey = encToPublic encSK
     let hdPass = deriveHDPassphrase pubKey
     let wCId = encodeCType $ makeRootPubKeyAddress pubKey
     (hdPass, wCId)
+eskToWalletDecrCredentials Nothing = error "eskToWalletDecrCredentials IMPLEMENT"
 
 selectOwnAddresses
     :: WalletDecrCredentials

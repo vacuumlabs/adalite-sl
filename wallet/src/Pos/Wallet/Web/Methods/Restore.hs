@@ -103,7 +103,7 @@ restoreWallet :: ( L.MonadWalletLogic ctx m
                  ) => EncryptedSecretKey -> m CWallet
 restoreWallet sk = do
     db <- WS.askWalletDB
-    let credentials@(_, wId) = eskToWalletDecrCredentials sk
+    let credentials@(_, wId) = eskToWalletDecrCredentials $ Just sk
     Restore.restoreWallet credentials
     WS.setWalletReady db wId True
     L.getWallet wId

@@ -98,7 +98,10 @@ actionWithWallet sscParams nodeParams ntpConfig wArgs@WalletArgs {..} = do
     syncWallets :: WalletWebMode ()
     syncWallets = do
         ws  <- askWalletSnapshot
-        sks <- mapM getSKById (getWalletAddresses ws)
+        maybeSks <- mapM getSKById (getWalletAddresses ws)
+        -- Please note that external wallets doesn't have secret keys here,
+        -- because their secret keys are stored externally.
+        let sks = rights maybeSks
         forM_ sks (syncWallet . eskToWalletDecrCredentials)
     resubmitterPlugins = ([ActionSpec $ \diffusion -> askWalletDB >>=
                             \db -> startPendingTxsResubmitter db (sendTx diffusion)], mempty)

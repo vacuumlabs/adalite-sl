@@ -170,7 +170,9 @@ getWalletIncludeUnready ws mps includeUnready cAddr = do
     let accountsNum = length accounts
     accMod     <- txMempoolToModifier ws mps . eskToWalletDecrCredentials =<< findKey cAddr
     balance    <- computeBalance accMod
-    hasPass    <- isNothing . checkPassMatches emptyPassphrase <$> getSKById cAddr
+    hasPass    <- getSKById cAddr >>= \case
+                      Nothing -> return False -- No secret key, it's external wallet, so no password.
+                      Just sk -> return $ isNothing . checkPassMatches emptyPassphrase $ sk
     passLU     <- maybeThrow noWallet (getWalletPassLU ws cAddr)
     pure $ CWallet cAddr meta accountsNum balance hasPass passLU
   where
@@ -341,7 +343,9 @@ changeWalletPassphrase
     :: MonadWalletLogic ctx m
     => CId Wal -> PassPhrase -> PassPhrase -> m NoContent
 changeWalletPassphrase wid oldPass newPass = do
-    oldSK <- getSKById wid
+    -- Spending password is related to internal wallet only,
+    -- so secret key must be here.
+    oldSK <- maybeThrow noSuchWallet =<< getSKById wid
 
     unless (isJust $ checkPassMatches newPass oldSK) $ do
         db <- askWalletDB
@@ -352,6 +356,7 @@ changeWalletPassphrase wid oldPass newPass = do
     return NoContent
   where
     badPass = RequestError "Invalid old passphrase given"
+    noSuchWallet = RequestError $ sformat ("Change password, no wallet with id "%build%" found") wid
 
 ----------------------------------------------------------------------------
 -- Helper functions
