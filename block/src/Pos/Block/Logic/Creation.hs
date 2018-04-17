@@ -29,7 +29,7 @@ import           Pos.Block.Logic.Internal (MonadBlockApply, applyBlocksUnsafe, n
 import           Pos.Block.Logic.Util (calcChainQualityM)
 import           Pos.Block.Logic.VAR (verifyBlocksPrefix)
 import           Pos.Block.Slog (HasSlogGState (..), ShouldCallBListener (..))
-import           Pos.Core (Blockchain (..), EpochIndex, EpochOrSlot (..), HasConfiguration,
+import           Pos.Core (Blockchain (..), EpochIndex, EpochOrSlot (..),
                            HeaderHash, SlotId (..), chainQualityThreshold, epochIndexL, epochSlots,
                            flattenSlotId, getEpochOrSlot, headerHash, protocolMagic)
 import           Pos.Core.Block (BlockHeader (..), GenesisBlock, MainBlock, MainBlockchain)
@@ -67,8 +67,7 @@ import           Pos.Util.Util (HasLens (..), HasLens')
 
 -- | A set of constraints necessary to create a block from mempool.
 type MonadCreateBlock ctx m
-     = ( HasConfiguration
-       , HasUpdateConfiguration
+     = ( HasUpdateConfiguration
        , MonadReader ctx m
        , HasPrimaryKey ctx
        , HasSlogGState ctx -- to check chain quality
@@ -294,7 +293,7 @@ canCreateBlock sId tipHeader =
 
 createMainBlockPure
     :: forall m.
-       (MonadError Text m, HasConfiguration, HasUpdateConfiguration)
+       (MonadError Text m, HasUpdateConfiguration)
     => Byte                   -- ^ Block size limit (real max.value)
     -> BlockHeader
     -> ProxySKBlockInfo
@@ -420,7 +419,7 @@ getRawPayload tip slotId = do
 -- Given limit applies only to body, not to other data from block.
 createMainBody
     :: forall m .
-       (MonadError Text m, HasConfiguration)
+       (MonadError Text m)
     => Byte  -- ^ Body limit
     -> SlotId
     -> RawPayload
