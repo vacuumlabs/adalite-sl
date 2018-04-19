@@ -12,6 +12,7 @@ import           Data.Map (fromList)
 import           Data.Traversable (for)
 import           Data.X509.File (readSignedObject)
 import qualified Pos.Core as Core
+import           System.Environment (withArgs)
 import           System.IO (hSetEncoding, stdout, utf8)
 import           System.IO.Unsafe (unsafePerformIO)
 import           Test.Hspec
@@ -61,7 +62,14 @@ main = do
         walletState
         actionDistribution
 
-    hspec $ deterministicTests walletClient
+    -- NOTE Our own CLI options interfere with `hspec` which parse them for
+    -- itself when executed, leading to a VERY unclear message:
+    --
+    --     cardano-integration-test: unrecognized option `--tls-ca-cert'
+    --     Try `cardano-integration-test --help' for more information.
+    --
+    -- See also: https://github.com/hspec/hspec/issues/135
+    withArgs [] . hspec $ deterministicTests walletClient
   where
     orFail :: MonadFail m => Either String a -> m a
     orFail =
