@@ -6,7 +6,7 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts     #-}
-{-# OPTIONS_GHC -Weverything -Wno-unsafe -Wno-type-defaults #-}
+{-# OPTIONS_GHC -Weverything -Wno-unsafe -Wno-type-defaults -Wno-missed-specialisations #-}
 
 module BlockSpec (spec, main) where
 
