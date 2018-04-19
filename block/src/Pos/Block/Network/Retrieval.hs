@@ -27,7 +27,8 @@ import           Pos.Block.Network.Types (MsgBlock (..), MsgGetBlocks (..))
 import           Pos.Block.RetrievalQueue (BlockRetrievalQueueTag, BlockRetrievalTask (..))
 import           Pos.Block.Types (RecoveryHeaderTag)
 import           Pos.Communication.Protocol (NodeId, OutSpecs, convH, toOutSpecs)
-import           Pos.Core (Block, HasHeaderHash (..), HeaderHash, difficultyL, isMoreDifficult)
+import           Pos.Core (Block, HasHeaderHash (..), HeaderHash, difficultyL, isMoreDifficult, HasGenesisData,
+                          HasGeneratedSecrets, HasGenesisHash, HasProtocolConstants, HasGenesisBlockVersionData)
 import           Pos.Core.Block (BlockHeader)
 import           Pos.Crypto (shortHashF)
 import qualified Pos.DB.BlockIndex as DB
@@ -39,8 +40,13 @@ import           Pos.Util.Util (HasLens (..))
 import           Pos.Worker.Types (WorkerSpec, worker)
 
 retrievalWorker
-    :: forall ctx m.
-       (BlockWorkMode ctx m)
+    :: ( BlockWorkMode ctx m
+       , HasGeneratedSecrets
+       , HasGenesisHash
+       , HasProtocolConstants
+       , HasGenesisBlockVersionData
+       , HasGenesisData
+       )
     => (WorkerSpec m, OutSpecs)
 retrievalWorker = worker outs retrievalWorkerImpl
   where
@@ -63,7 +69,13 @@ retrievalWorker = worker outs retrievalWorkerImpl
 --
 retrievalWorkerImpl
     :: forall ctx m.
-       (BlockWorkMode ctx m)
+       ( BlockWorkMode ctx m
+       , HasGeneratedSecrets
+       , HasGenesisHash
+       , HasProtocolConstants
+       , HasGenesisBlockVersionData
+       , HasGenesisData
+       )
     => Diffusion m -> m ()
 retrievalWorkerImpl diffusion = do
     logInfo "Starting retrievalWorker loop"
@@ -279,7 +291,13 @@ dropRecoveryHeaderAndRepeat diffusion nodeId = do
 -- processed. Throws exception if something goes wrong.
 getProcessBlocks
     :: forall ctx m.
-       (BlockWorkMode ctx m)
+       ( BlockWorkMode ctx m
+       , HasGeneratedSecrets
+       , HasGenesisBlockVersionData
+       , HasProtocolConstants
+       , HasGenesisHash
+       , HasGenesisData
+       )
     => Diffusion m
     -> NodeId
     -> BlockHeader

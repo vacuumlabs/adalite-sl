@@ -36,7 +36,6 @@ import           Serokell.Util.Text (listJson)
 import           System.Wlog (WithLogger, logWarning)
 
 import           Pos.Communication.Types.Protocol
-import           Pos.Core.Configuration (HasConfiguration)
 import           Pos.Recovery.Info (MonadRecoveryInfo)
 import           Pos.Reporting (MonadReporting)
 import           Pos.Shutdown (HasShutdownContext)
@@ -215,14 +214,12 @@ type LocalOnNewSlotComm ctx m =
     , MonadReporting ctx m
     , HasShutdownContext ctx
     , MonadRecoveryInfo m
-    , HasConfiguration
     )
 
 type OnNewSlotComm ctx m =
     ( LocalOnNewSlotComm ctx m
     , MonadThrow m
     , Mockable SharedAtomic m
-    , HasConfiguration
     )
 
 checkProtocolMagic

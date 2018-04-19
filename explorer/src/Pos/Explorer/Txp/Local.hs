@@ -12,7 +12,7 @@ import           Universum
 
 import qualified Data.HashMap.Strict as HM
 
-import           Pos.Core (BlockVersionData, EpochIndex, Timestamp)
+import           Pos.Core (BlockVersionData, EpochIndex, Timestamp, HasConfiguration)
 import           Pos.Core.Txp (TxAux (..), TxId)
 import           Pos.Slotting (MonadSlots (getCurrentSlot), getSlotStart)
 import           Pos.StateLock (Priority (..), StateLock, StateLockMetrics, withStateLock)
@@ -38,6 +38,7 @@ eTxProcessTransaction ::
        ( ETxpLocalWorkMode ctx m
        , HasLens' ctx StateLock
        , HasLens' ctx StateLockMetrics
+       , HasConfiguration
        )
     => (TxId, TxAux)
     -> m (Either ToilVerFailure ())
@@ -45,7 +46,7 @@ eTxProcessTransaction itw =
     withStateLock LowPriority "eTxProcessTransaction" $ \__tip -> eTxProcessTransactionNoLock itw
 
 eTxProcessTransactionNoLock ::
-       forall ctx m. (ETxpLocalWorkMode ctx m)
+       forall ctx m. (ETxpLocalWorkMode ctx m, HasConfiguration)
     => (TxId, TxAux)
     -> m (Either ToilVerFailure ())
 eTxProcessTransactionNoLock itw = getCurrentSlot >>= \case
@@ -72,7 +73,7 @@ eTxProcessTransactionNoLock itw = getCurrentSlot >>= \case
 --   2. Remove invalid transactions from MemPool
 --   3. Set new tip to txp local data
 eTxNormalize ::
-       forall ctx m. (ETxpLocalWorkMode ctx m)
+       forall ctx m. (ETxpLocalWorkMode ctx m, HasConfiguration)
     => m ()
 eTxNormalize = do
     extras <- MM.insertionsMap . view eemLocalTxsExtra <$> withTxpLocalData getTxpExtra
