@@ -7716,18 +7716,19 @@ inherit (pkgs) mesa;};
          , cardano-sl-crypto, cardano-sl-db, cardano-sl-delegation
          , cardano-sl-infra, cardano-sl-networking, cardano-sl-ssc
          , cardano-sl-txp, cardano-sl-update, cardano-sl-util
-         , cardano-sl-wallet, conduit, constraints, containers, data-default
-         , directory, exceptions, formatting, generics-sop, hspec
-         , http-api-data, http-client, http-types, insert-ordered-containers
+         , cardano-sl-wallet, conduit, connection, constraints, containers
+         , data-default, data-default-class, directory, exceptions
+         , formatting, generics-sop, hspec, http-api-data, http-client
+         , http-client-tls, http-types, insert-ordered-containers
          , ixset-typed, json-sop, lens, log-warper, memory, mmorph, mtl
          , neat-interpolation, optparse-applicative, pretty-show, process
          , QuickCheck, quickcheck-instances, reflection, safe-exceptions
          , serokell-util, servant, servant-client, servant-client-core
          , servant-quickcheck, servant-server, servant-swagger
          , servant-swagger-ui, stdenv, stm, string-conv, swagger2, text
-         , text-format, time, time-units, transformers, universum, unliftio
-         , unliftio-core, unordered-containers, vector, wai, wai-cors
-         , wai-extra, warp
+         , text-format, time, time-units, tls, transformers, universum
+         , unliftio, unliftio-core, unordered-containers, vector, wai
+         , wai-cors, wai-extra, warp, x509, x509-store
          }:
          mkDerivation {
            pname = "cardano-sl-wallet-new";
@@ -7740,13 +7741,14 @@ inherit (pkgs) mesa;};
              cardano-sl-client cardano-sl-core cardano-sl-crypto cardano-sl-db
              cardano-sl-infra cardano-sl-networking cardano-sl-ssc
              cardano-sl-txp cardano-sl-update cardano-sl-util cardano-sl-wallet
-             containers data-default exceptions formatting generics-sop
-             http-api-data http-client http-types ixset-typed json-sop lens
-             log-warper memory mtl QuickCheck reflection safe-exceptions
-             serokell-util servant servant-client servant-client-core
-             servant-quickcheck servant-server servant-swagger-ui stm
-             string-conv swagger2 text text-format time time-units transformers
-             universum unliftio-core unordered-containers vector wai
+             connection containers data-default data-default-class exceptions
+             formatting generics-sop http-api-data http-client http-client-tls
+             http-types ixset-typed json-sop lens log-warper memory mtl
+             QuickCheck reflection safe-exceptions serokell-util servant
+             servant-client servant-client-core servant-quickcheck
+             servant-server servant-swagger-ui stm string-conv swagger2 text
+             text-format time time-units tls transformers universum
+             unliftio-core unordered-containers vector wai x509 x509-store
            ];
            executableHaskellDepends = [
              aeson aeson-diff aeson-pretty base bytestring cardano-sl
@@ -7760,7 +7762,7 @@ inherit (pkgs) mesa;};
              serokell-util servant servant-client servant-server servant-swagger
              servant-swagger-ui stm string-conv swagger2 text text-format
              time-units universum unliftio unordered-containers wai wai-cors
-             wai-extra warp
+             wai-extra warp x509 x509-store
            ];
            testHaskellDepends = [
              aeson aeson-pretty base bytestring cardano-sl cardano-sl-block
