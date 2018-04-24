@@ -415,10 +415,6 @@ runAction wc action = do
             log $ "Posting address: " <> ppShowT newAddress
             result  <-  respToRes $ postAddress wc newAddress
 
-            checkInvariant
-                (addrBalance result == minBound)
-                (AddressBalanceNotZero result)
-
             -- Modify wallet state accordingly.
             addresses  <>= [result]
             accounts . traverse . filtered (== account) %= \acct ->
@@ -450,7 +446,6 @@ runAction wc action = do
         -- Transactions
         PostTransaction -> do
             localAccounts  <- use accounts
-            localAddresses <- use addresses
 
             -- Some min amount of money so we can send a transaction?
             -- https://github.com/input-output-hk/cardano-sl/blob/develop/lib/configuration.yaml#L228
@@ -460,8 +455,10 @@ runAction wc action = do
             -- From which source to pay.
             accountSource <- pickRandomElement localAccsWithMoney
 
+            let but xs x = filter (/= x) xs
+            accountDestination <- pickRandomElement (localAccounts `but` accountSource)
+
             let accountSourceMoney = accAmount accountSource
-                withoutSourceAddresses = filter (`notElem` accAddresses accountSource) localAddresses
                 reasonableFee = 100
 
             -- We should probably have a sensible minimum value.
@@ -478,7 +475,7 @@ runAction wc action = do
                         , psAccountIndex = accIndex    accountSource
                         }
 
-            addressDestination <- pickRandomElement withoutSourceAddresses
+            addressDestination <- pickRandomElement $ accAddresses accountDestination
 
             let paymentDestinations =
                     PaymentDistribution
@@ -535,7 +532,7 @@ runAction wc action = do
 
             let changeAddress = toList (txOutputs newTx) \\ toList paymentDestinations
                 -- NOTE: instead of this manual conversion we could filter WalletAddress from getAddressIndex
-                pdToChangeAddress PaymentDistribution{..} = WalletAddress pdAddress pdAmount True True
+                pdToChangeAddress PaymentDistribution{..} = WalletAddress pdAddress True True
                 realChangeAddressId = map addrId addressesAfterTransaction \\ map addrId addressesBeforeTransaction
                 changeWalletAddresses = filter ((`elem` realChangeAddressId) . addrId) addressesAfterTransaction
 
@@ -548,26 +545,26 @@ runAction wc action = do
                 )
                 (UnexpectedChangeAddress changeWalletAddresses)
 
-            let checkWalletAddressAfter diffList expectedOperation = do
-                    log "checking expected addresses balances..."
-                    forM_ diffList $ \PaymentDistribution{..} -> do
-                        let mBeforePayment = find ((pdAddress ==) . addrId) addressesBeforeTransaction
-                            mAfterPayment = find ((pdAddress ==) . addrId) addressesAfterTransaction
-                        case (,) <$> mBeforePayment <*> mAfterPayment of
-                            Just (beforePayment, afterPayment) -> do
-                                let balanceBeforePaymentModified = V1 . expectedOperation (unV1 pdAmount) . unV1 $ addrBalance beforePayment
-                                    balanceAfterPayment = addrBalance afterPayment
-                                checkInvariant
-                                    (balanceBeforePaymentModified == balanceAfterPayment)
-                                    (UnexpectedAddressBalance beforePayment afterPayment)
-                            Nothing -> throwM $ CantFindAddress pdAddress
 
-            -- Check did addresses of all payment sources decrease by expected amount after transaction
-            checkWalletAddressAfter (txInputs newTx) $ flip unsafeSubCoin
+            accountSourceAfter <-
+                respToRes $ getAccount wc (accWalletId accountSource) (accIndex accountSource)
 
-            -- Check did addresses of all payment destinations increase by expected amount after transaction
-            -- NOTE: we are using paymentDestinations instead of txOutputs to eliminate changeAddress
-            checkWalletAddressAfter paymentDestinations unsafeAddCoin
+            accountDestinationAfter <-
+                respToRes $ getAccount wc (accWalletId accountDestination) (accIndex accountDestination)
+
+            let checkAccountAmount op accBefore accAfter = checkInvariant
+                    (op (accAmount accBefore) == accAmount accAfter)
+                    (UnexpectedAccountBalance accBefore accAfter)
+
+            -- Check whether the source account decrease by expected amount after tx
+            checkAccountAmount (\balance -> V1 $ ((unV1 balance) `unsafeSubCoin` moneyAmount) `unsafeSubCoin` (unV1 actualFees))
+                accountSource
+                accountSourceAfter
+
+            -- Check whether the destination account increased by expected amount after tx
+            checkAccountAmount (\balance -> V1 $ (unV1 balance) `unsafeAddCoin` moneyAmount)
+                accountDestination
+                accountDestinationAfter
 
             -- Modify wallet state accordingly.
             transactions  <>= [(accountSource, newTx)]
