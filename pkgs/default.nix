@@ -6947,9 +6947,9 @@ inherit (pkgs) mesa;};
          , random, reflection, safe-exceptions, safecopy, serokell-util
          , servant, servant-client, servant-client-core, servant-server
          , servant-swagger, stdenv, stm, systemd, tagged, template-haskell
-         , text, text-format, time, time-units, transformers, universum
+         , text, text-format, time, time-units, tls, transformers, universum
          , unix, unliftio, unordered-containers, vector, wai, warp, warp-tls
-         , yaml
+         , x509, x509-store, x509-validation, yaml
          }:
          mkDerivation {
            pname = "cardano-sl";
@@ -6969,8 +6969,9 @@ inherit (pkgs) mesa;};
              reflection safe-exceptions safecopy serokell-util servant
              servant-client servant-client-core servant-server servant-swagger
              stm systemd tagged template-haskell text text-format time
-             time-units transformers universum unix unliftio
-             unordered-containers wai warp warp-tls yaml
+             time-units tls transformers universum unix unliftio
+             unordered-containers wai warp warp-tls x509 x509-store
+             x509-validation yaml
            ];
            testHaskellDepends = [
              base bytestring canonical-json cardano-crypto cardano-sl-binary
