@@ -6767,6 +6767,7 @@ inherit (pkgs) mesa;};
          , text-format, time, time-units, transformers, universum, unliftio
          , unliftio-core, unordered-containers, vector, wai, wai-cors
          , wai-extra, warp
+         }:
          mkDerivation {
            pname = "cardano-sl-wallet-new";
            version = "1.1.1";
@@ -6814,6 +6815,7 @@ inherit (pkgs) mesa;};
              servant servant-quickcheck servant-server servant-swagger stm
              string-conv swagger2 text text-format time time-units universum
              unliftio unordered-containers
+           ];
            doHaddock = false;
            homepage = "https://github.com/input-output-hk/cardano-sl/#readme";
            description = "The Wallet Backend for a Cardano node";
