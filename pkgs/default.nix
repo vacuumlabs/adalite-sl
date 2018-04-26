@@ -7522,9 +7522,8 @@ inherit (pkgs) mesa;};
          , pipes-safe, process, QuickCheck, random, random-shuffle
          , safe-exceptions, serokell-util, silently, stdenv, stm
          , string-conv, tabl, tar, temporary, text, time, time-units
-         , transformers, trifecta, universum, unix, unix-compat
-         , unordered-containers, vector, x509, x509-store, x509-validation
-         , yaml
+         , trifecta, universum, unix, unix-compat, unordered-containers
+         , vector, x509, x509-store, x509-validation, yaml
          }:
          mkDerivation {
            pname = "cardano-sl-tools";
@@ -7551,9 +7550,9 @@ inherit (pkgs) mesa;};
              optparse-applicative optparse-generic parsec parsers pipes
              pipes-bytestring pipes-interleave pipes-safe process QuickCheck
              random random-shuffle safe-exceptions serokell-util silently stm
-             string-conv tabl tar text time time-units transformers trifecta
-             universum unix unix-compat unordered-containers vector x509
-             x509-store x509-validation yaml
+             string-conv tabl tar text time time-units trifecta universum unix
+             unix-compat unordered-containers vector x509 x509-store
+             x509-validation yaml
            ];
            executableToolDepends = [ cpphs ];
            testHaskellDepends = [
