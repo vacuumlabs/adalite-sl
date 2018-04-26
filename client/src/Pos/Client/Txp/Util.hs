@@ -103,7 +103,7 @@ data TxRaw = TxRaw
 data TxError =
       NotEnoughMoney !Coin
       -- ^ Parameter: how much more money is needed
-    | NotEnoughAllowedMoney !Coin
+    | NotEnoughAllowedMoney !Coin !Coin
       -- ^ Parameter: how much more money is needed and which available input addresses
       -- are present in output addresses set
     | FailedToStabilize
@@ -129,9 +129,9 @@ instance Exception TxError
 instance Buildable TxError where
     build (NotEnoughMoney coin) =
         bprint ("Transaction creation error: not enough money, need "%build%" more") coin
-    build (NotEnoughAllowedMoney coin) =
+    build (NotEnoughAllowedMoney coin disallowed) =
         bprint ("Transaction creation error: not enough money on addresses which are not included \
-                \in output addresses set, need "%build%" more") coin
+                \in output addresses set, need "%build%" more, disallowed are "%build%" coin(s)") coin disallowed
     build FailedToStabilize =
         "Transaction creation error: failed to stabilize fee"
     build (OutputIsRedeem addr) =
@@ -408,7 +408,7 @@ groupedInputPicker utxo outputs moneyToSpent =
                 mNextOutGroup <- head <$> use gipsAvailableOutputGroups
                 case mNextOutGroup of
                     Nothing -> if disallowedMoney >= coinToInteger moneyLeft
-                        then throwError $ NotEnoughAllowedMoney moneyLeft
+                        then throwError $ NotEnoughAllowedMoney moneyLeft $ mkCoin $ fromIntegral disallowedMoney
                         else throwError $ NotEnoughMoney moneyLeft
                     Just UtxoGroup {..} -> do
                         gipsMoneyLeft .= unsafeSubCoin moneyLeft (min ugTotalMoney moneyLeft)

@@ -110,18 +110,12 @@ sendToAllGenesis diffusion (SendToAllGenesisParams duration conc delay_ tpsSentF
         let startAt = fromMaybe 0 . readMaybe . fromMaybe "" $ startAtTxt :: Int
         -- construct transaction output
         outAddr <- makePubKeyAddressAuxx (toPublic (fromMaybe (error "sendToAllGenesis: no keys") $ head keysToSend))
-        let val1 = mkCoin 1000000
+        let val1 = mkCoin 1
             txOut1 = TxOut {
                 txOutAddress = outAddr,
                 txOutValue = val1
                 }
             txOuts = TxOutAux txOut1 :| []
-            val2 = mkCoin 5
-            txOut2 = TxOut {
-                txOutAddress = outAddr,
-                txOutValue = val2
-                }
-            txOuts2 = TxOutAux txOut2 :| []
         -- construct a transaction, and add it to the queue
         let addTx secretKey = do
                 utxo <- getOwnUtxoForPk $ safeToPublic (fakeSigner secretKey)
@@ -193,9 +187,15 @@ sendToAllGenesis diffusion (SendToAllGenesisParams duration conc delay_ tpsSentF
         logInfo "Trying send starts."
         (atomically $ tryReadTQueue txQueue') >>= \case
             Just (tx, txOut1new) -> do
+                outAddr' <- makePubKeyAddressAuxx (toPublic (fromMaybe (error "sendToAllGenesis: no keys") $ Just (keysToSend !! 2)))
                 let txInp = TxInUtxo (hash (taTx tx)) 0
                     utxo' = M.fromList [(txInp, TxOutAux txOut1)]
                     Just firstsKey = head keysToSend
+                    txOut2 = TxOut {
+                        txOutAddress = outAddr',
+                        txOutValue = mkCoin 1
+                        }
+                    txOuts2 = TxOutAux txOut2 :| []
                 logInfo $ "Utxo: " <> show utxo'
                 etx' <- createTx mempty utxo' (fakeSigner firstsKey) txOuts2 (toPublic firstsKey)
                 case etx' of
