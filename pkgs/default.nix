@@ -5712,9 +5712,9 @@ inherit (pkgs) mesa;};
          }:
          mkDerivation {
            pname = "cabal-install";
-           version = "2.2.0.0";
+           version = "2.0.0.1";
            sha256 = "f991e36f3adaa1c7e2f0c422a2f2a4ab21b7041c82a8896f72afc9843a0d5d99";
-           revision = "0";
+           revision = "3";
            editedCabalFile = "148rq7hcbl8rq7pkywn1hk3l7lv442flf6b0wamfixxzxk74fwlj";
            isLibrary = false;
            isExecutable = true;
