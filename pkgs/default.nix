@@ -5708,22 +5708,28 @@ inherit (pkgs) mesa;};
          , bytestring, Cabal, containers, cryptohash-sha256, deepseq
          , directory, echo, edit-distance, filepath, hackage-security
          , hashable, HTTP, mtl, network, network-uri, pretty, process
-         , random, stdenv, stm, tar, time, unix, zlib
+         , random, resolv, stdenv, stm, tar, time, unix, zlib
          }:
          mkDerivation {
            pname = "cabal-install";
-           version = "2.0.0.1";
-           sha256 = "f991e36f3adaa1c7e2f0c422a2f2a4ab21b7041c82a8896f72afc9843a0d5d99";
-           revision = "3";
-           editedCabalFile = "148rq7hcbl8rq7pkywn1hk3l7lv442flf6b0wamfixxzxk74fwlj";
-           isLibrary = false;
+           version = "2.2.0.0";
+           sha256 = "c856a2dd93c5a7b909597c066b9f9ca27fbda1a502b3f96077b7918c0f64a3d9";
+           revision = "1";
+           editedCabalFile = "0f1svlhh4cpj3p5fs9bcjpv15qp291lnvlaxxcw7aib8a1gn3wim";
+           isLibrary = true;
            isExecutable = true;
            setupHaskellDepends = [ base Cabal filepath process ];
+           libraryHaskellDepends = [
+             array async base base16-bytestring binary bytestring Cabal
+             containers cryptohash-sha256 deepseq directory echo edit-distance
+             filepath hackage-security hashable HTTP mtl network network-uri
+             pretty process random resolv stm tar time unix zlib
+           ];
            executableHaskellDepends = [
              array async base base16-bytestring binary bytestring Cabal
              containers cryptohash-sha256 deepseq directory echo edit-distance
              filepath hackage-security hashable HTTP mtl network network-uri
-             pretty process random stm tar time unix zlib
+             pretty process random resolv stm tar time unix zlib
            ];
            doHaddock = false;
            doCheck = false;
