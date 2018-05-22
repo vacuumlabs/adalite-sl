@@ -23,9 +23,10 @@ import           Pos.Explorer.Web.ClientTypes (Byte, CAda (..), CAddress (..), C
                                                CBlockEntry (..), CBlockSummary (..),
                                                CGenesisAddressInfo (..), CGenesisSummary (..),
                                                CHash (..), CTxBrief (..), CTxEntry (..), CTxId (..),
-                                               CTxSummary (..), mkCCoin)
+                                               CTxSummary (..), CUtxo (..), mkCCoin)
 import           Pos.Explorer.Web.Error (ExplorerError (..))
 import           Pos.Web ()
+
 
 ----------------------------------------------------------------
 -- Top level functionality
@@ -53,6 +54,7 @@ explorerHandlers =
         , _txsLast            = testTxsLast
         , _txsSummary         = testTxsSummary
         , _addressSummary     = testAddressSummary
+        , _addressUtxoBulk    = testAddressUtxoBulk
         , _epochPages         = testEpochPageSearch
         , _epochSlots         = testEpochSlotSearch
         , _genesisSummary     = testGenesisSummary
@@ -183,6 +185,16 @@ testAddressSummary
     :: CAddress
     -> Handler CAddressSummary
 testAddressSummary _  = pure sampleAddressSummary
+
+testAddressUtxoBulk
+    :: [CAddress]
+    -> Handler [CUtxo]
+testAddressUtxoBulk _  = pure [CUtxo
+    { cuId = CTxId $ CHash "8aac4a6b18fafa2783071c66519332157ce96c67e88fc0cc3cb04ba0342d12a1"
+    , cuOutIndex = 0
+    , cuAddress = CAddress "19F6U1Go5B4KakVoCZfzCtqNAWhUBprxVzL3JsGu74TEwQnXPvAKPUbvG8o4Qe5RaY8Z7WKLfxmNFwBqPV1NQ2hRpKkdEN"
+    , cuCoins = mkCCoin $ mkCoin 3
+    }]
 
 testEpochSlotSearch
     :: EpochIndex

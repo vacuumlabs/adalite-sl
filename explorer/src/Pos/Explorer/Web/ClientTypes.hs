@@ -17,6 +17,7 @@ module Pos.Explorer.Web.ClientTypes
        , CAddressType (..)
        , CAddressSummary (..)
        , CTxBrief (..)
+       , CUtxo  (..)
        , CNetworkAddress (..)
        , CTxSummary (..)
        , CGenesisSummary (..)
@@ -84,6 +85,8 @@ import           Pos.Explorer.Core (TxExtra (..))
 import           Pos.Explorer.ExplorerMode (ExplorerMode)
 import           Pos.Explorer.ExtraContext (HasExplorerCSLInterface (..))
 import           Pos.Explorer.TestUtil (secretKeyToAddress)
+
+
 -------------------------------------------------------------------------------------
 -- Hash types
 -------------------------------------------------------------------------------------
@@ -303,6 +306,13 @@ data CTxBrief = CTxBrief
     , ctbOutputs    :: ![(CAddress, CCoin)]
     , ctbInputSum   :: !CCoin
     , ctbOutputSum  :: !CCoin
+    } deriving (Show, Generic)
+
+data CUtxo = CUtxo
+    { cuId         :: !CTxId
+    , cuOutIndex   :: !Int
+    , cuAddress    :: !CAddress
+    , cuCoins      :: !CCoin
     } deriving (Show, Generic)
 
 newtype CNetworkAddress = CNetworkAddress Text

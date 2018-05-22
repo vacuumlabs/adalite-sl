@@ -84,6 +84,7 @@ instance ToParamSchema C.EpochIndex
 instance ToSchema      C.CTxSummary
 instance ToSchema      C.CTxEntry
 instance ToSchema      C.CTxBrief
+instance ToSchema      C.CUtxo
 instance ToSchema      C.CBlockSummary
 instance ToSchema      C.CBlockEntry
 instance ToSchema      C.CAddressType

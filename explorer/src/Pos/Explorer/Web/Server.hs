@@ -61,7 +61,7 @@ import           Pos.Core (AddrType (..), Address (..), Coin, EpochIndex, Header
                            isUnknownAddressType, makeRedeemAddress, siEpoch, siSlot, sumCoins,
                            timestampToPosix, unsafeAddCoin, unsafeIntegerToCoin, unsafeSubCoin)
 import           Pos.Core.Block (Block, MainBlock, mainBlockSlot, mainBlockTxPayload, mcdSlot)
-import           Pos.Core.Txp (Tx (..), TxAux, TxId, TxOutAux (..), taTx, txOutValue, txpTxs,
+import           Pos.Core.Txp (Tx (..), TxAux, TxId, TxOutAux (..), TxOut (..), TxIn (..), taTx, txOutValue, txpTxs,
                                _txOutputs)
 import           Pos.Slotting (MonadSlots (..), getSlotStart)
 import           Pos.Txp (MonadTxpMem, TxMap, getLocalTxs, getMemPool, mpLocalTxs, topsortTxs,
@@ -83,13 +83,15 @@ import           Pos.Explorer.Web.ClientTypes (Byte, CAda (..), CAddress (..), C
                                                CBlockEntry (..), CBlockSummary (..),
                                                CGenesisAddressInfo (..), CGenesisSummary (..),
                                                CHash, CTxBrief (..), CTxEntry (..), CTxId (..),
-                                               CTxSummary (..), TxInternal (..), convertTxOutputs,
+                                               CTxSummary (..), TxInternal (..), CUtxo(..), convertTxOutputs,
                                                convertTxOutputsMB, fromCAddress, fromCHash,
                                                fromCTxId, getEpochIndex, getSlotIndex, mkCCoin,
                                                mkCCoinMB, tiToTxEntry, toBlockEntry, toBlockSummary,
                                                toCAddress, toCHash, toCTxId, toTxBrief)
 import           Pos.Explorer.Web.Error (ExplorerError (..))
 
+import           Pos.Txp.DB.Utxo (getFilteredUtxo)
+import qualified Data.Map as M
 
 
 ----------------------------------------------------------------
@@ -127,6 +129,7 @@ explorerHandlers _diffusion =
         , _txsLast            = getLastTxs
         , _txsSummary         = getTxSummary
         , _addressSummary     = getAddressSummary
+        , _addressUtxoBulk    = getAddressUtxoBulk
         , _epochPages         = getEpochPage
         , _epochSlots         = getEpochSlot
         , _genesisSummary     = getGenesisSummary
@@ -365,6 +368,28 @@ getAddressSummary cAddr = do
             ATScript     -> CScriptAddress
             ATRedeem     -> CRedeemAddress
             ATUnknown {} -> CUnknownAddress
+
+
+getAddressUtxoBulk
+    :: ExplorerMode ctx m
+    => [CAddress]
+    -> m [CUtxo]
+getAddressUtxoBulk cAddrs = do
+    addrs <- mapM cAddrToAddr cAddrs
+    utxo <- getFilteredUtxo addrs
+
+    pure $ futxoToCUtxo <$> (M.toList utxo)
+  where
+    futxoToCUtxo :: (TxIn, TxOutAux) -> CUtxo
+    futxoToCUtxo (txIn, txOutAux) = CUtxo {
+        cuId = (toCTxId . txInHash) txIn,
+        cuOutIndex = (fromIntegral . txInIndex) txIn,
+        cuAddress = (toCAddress . txOutAddress . toaOut) txOutAux,
+        cuCoins = (mkCCoin . txOutValue . toaOut) txOutAux
+    }
+
+
+
 
 -- | Get transaction summary from transaction id. Looks at both the database
 -- and the memory (mempool) for the transaction. What we have at the mempool

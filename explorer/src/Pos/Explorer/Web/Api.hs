@@ -15,7 +15,7 @@ import           Universum
 
 import           Control.Exception.Safe (try)
 import           Data.Proxy (Proxy (Proxy))
-import           Servant.API ((:>), Capture, Get, JSON, QueryParam, Summary)
+import           Servant.API ((:>), Capture, Get, Post, JSON, QueryParam, Summary, ReqBody)
 import           Servant.Generic ((:-), AsApi, ToServant)
 import           Servant.Server (ServantErr (..))
 
@@ -23,7 +23,7 @@ import           Pos.Core (EpochIndex)
 import           Pos.Explorer.Web.ClientTypes (Byte, CAda, CAddress, CAddressSummary,
                                                CAddressesFilter, CBlockEntry, CBlockSummary,
                                                CGenesisAddressInfo, CGenesisSummary, CHash,
-                                               CTxBrief, CTxEntry, CTxId, CTxSummary)
+                                               CTxBrief, CTxEntry, CTxId, CTxSummary, CUtxo)
 import           Pos.Explorer.Web.Error (ExplorerError)
 import           Pos.Util.Servant (DQueryParam, ModifiesApiRes (..), VerbMod)
 
@@ -113,6 +113,14 @@ data ExplorerApiRecord route = ExplorerApiRecord
         :> "summary"
         :> Capture "address" CAddress
         :> ExRes Get CAddressSummary
+
+  , _addressUtxoBulk :: route
+        :- Summary "Get summary information about multiple addresses."
+        :> "bulk"
+        :> "addresses"
+        :> "utxo"
+        :> ReqBody '[JSON] [CAddress]
+        :> ExRes Post [CUtxo]
 
   , _epochPages :: route
         :- Summary "Get epoch pages, all the paged slots in the epoch."

@@ -20,8 +20,9 @@ import           Pos.Explorer.Web.ClientTypes (CAda (..), CAddress, CAddressSumm
                                                CBlockEntry, CBlockSummary, CCoin,
                                                CGenesisAddressInfo, CGenesisSummary, CHash,
                                                CNetworkAddress, CTxBrief, CTxEntry, CTxId,
-                                               CTxSummary)
+                                               CTxSummary, CUtxo)
 import           Pos.Explorer.Web.Error (ExplorerError)
+import           Pos.Aeson.Txp ()
 
 deriveJSON defaultOptions ''CHash
 deriveJSON defaultOptions ''CAddress
@@ -39,6 +40,7 @@ deriveToJSON defaultOptions ''CNetworkAddress
 deriveToJSON defaultOptions ''CTxSummary
 deriveToJSON defaultOptions ''CGenesisSummary
 deriveToJSON defaultOptions ''CGenesisAddressInfo
+deriveToJSON defaultOptions ''CUtxo
 
 instance ToJSON CAda where
     -- https://github.com/bos/aeson/issues/227#issuecomment-245400284
