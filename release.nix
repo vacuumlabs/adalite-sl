@@ -1,3 +1,4 @@
+
 let
   fixedNixpkgs = (import ./lib.nix).fetchNixPkgs;
 in
@@ -44,17 +45,14 @@ let
     stack2nix = supportedSystems;
     purescript = supportedSystems;
     daedalus-bridge = supportedSystems;
-  };
-  platforms' = {
-    connectScripts.mainnet.wallet   = [ "x86_64-linux" "x86_64-darwin" ];
-    connectScripts.mainnet.explorer = [ "x86_64-linux" "x86_64-darwin" ];
-    connectScripts.staging.wallet   = [ "x86_64-linux" "x86_64-darwin" ];
-    connectScripts.staging.explorer = [ "x86_64-linux" "x86_64-darwin" ];
-    connectScripts.testnet.wallet   = [ "x86_64-linux" "x86_64-darwin" ];
-    connectScripts.testnet.explorer = [ "x86_64-linux" "x86_64-darwin" ];
+    connectScripts.mainnet.wallet   = [ "x86_64-linux"];
+    connectScripts.mainnet.explorer = [ "x86_64-linux"];
+    connectScripts.staging.wallet   = [ "x86_64-linux"];
+    connectScripts.staging.explorer = [ "x86_64-linux"];
+    connectScripts.testnet.wallet   = [ "x86_64-linux"];
+    connectScripts.testnet.explorer = [ "x86_64-linux"];
   };
   mapped = mapTestOn platforms;
-  mapped' = mapTestOn platforms';
   makeConnectScripts = cluster: let
   in {
     inherit (mapped'.connectScripts."${cluster}") wallet explorer;

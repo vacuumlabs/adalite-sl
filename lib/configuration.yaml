@@ -112,7 +112,7 @@ dev: &dev
     pendingTxResubmissionPeriod: 7 # seconds
     walletProductionApi: false
     walletTxCreationDisabled: false
-    explorerExtendedApi: false
+    explorerExtendedApi: true
 
   tls: &dev_tls
     ca:
@@ -311,7 +311,7 @@ mainnet_base: &mainnet_base
     pendingTxResubmissionPeriod: 7 # seconds
     walletProductionApi: true
     walletTxCreationDisabled: false
-    explorerExtendedApi: false
+    explorerExtendedApi: true
 
   tls: &mainnet_base_tls
     ca:

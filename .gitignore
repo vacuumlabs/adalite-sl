@@ -207,3 +207,10 @@ venv.bak/
 .mypy_cache/
 
 # End of https://www.gitignore.io/api/python
+
+cardanolite-sl.sublime-workspace
+cardanolite-sl.sublime-project
+connect-explorer-to-mainnet
+connect-wallet-to-mainnet
+connect-wallet-to-mainnet
+cardano-sl-explorer-static
