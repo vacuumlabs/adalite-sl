@@ -45,7 +45,7 @@ module Pos.Explorer.Web.ClientTypes
        , toTxBrief
        , timestampToPosix
        , convertTxOutputs
-       , convertTxOutputsMB
+       , convertTxInputOutputsMB
        , tiToTxEntry
        , encodeHashHex
        , decodeHashHex
@@ -79,8 +79,8 @@ import           Pos.Core (Address, Coin, EpochIndex, LocalSlotIndex,
                      unsafeAddCoin, unsafeGetCoin, unsafeIntegerToCoin,
                      unsafeSubCoin)
 import           Pos.Core.Merkle (getMerkleRoot, mkMerkleTree, mtRoot)
-import           Pos.Core.Txp (Tx (..), TxId, TxOut (..), TxOutAux (..), TxUndo,
-                     txpTxs, _txOutputs)
+import           Pos.Core.Txp (Tx (..), TxId, TxIn (..), TxOut (..), TxOutAux (..),
+                     TxUndo, txpTxs, _txOutputs)
 import           Pos.Crypto (AbstractHash, Hash, HashAlgorithm, hash)
 import qualified Pos.DB.Lrc as LrcDB (getLeader)
 import qualified Pos.GState as GS
@@ -306,7 +306,7 @@ data CAddressSummary = CAddressSummary
 data CTxBrief = CTxBrief
     { ctbId         :: !CTxId
     , ctbTimeIssued :: !(Maybe POSIXTime)
-    , ctbInputs     :: ![Maybe (CAddress, CCoin)]
+    , ctbInputs     :: ![Maybe (CTxId, Int, CAddress, CCoin)]
     , ctbOutputs    :: ![(CAddress, CCoin)]
     , ctbInputSum   :: !CCoin
     , ctbOutputSum  :: !CCoin
@@ -411,8 +411,13 @@ tiTimestamp = teReceivedTime . tiExtra
 tiToTxEntry :: TxInternal -> CTxEntry
 tiToTxEntry txi@TxInternal{..} = toTxEntry (tiTimestamp txi) tiTx
 
-convertTxOutputsMB :: [Maybe TxOut] -> [Maybe (CAddress, Coin)]
-convertTxOutputsMB = map (fmap $ toCAddress . txOutAddress &&& txOutValue)
+convertTxInputOutputsMB :: [TxIn] -> [Maybe TxOut] -> [Maybe (CTxId, Int, CAddress, Coin)]
+convertTxInputOutputsMB tis mtos = map toCTxIn (zip tis (map (fmap $ toCAddress . txOutAddress &&& txOutValue) mtos))
+  where
+    toCTxIn :: (TxIn, Maybe (CAddress, Coin)) -> Maybe (CTxId, Int, CAddress, Coin)
+    toCTxIn ((TxInUtxo txInHash txInIndex), Just (cAddress, coin)) =
+      Just (toCTxId txInHash, fromIntegral txInIndex, cAddress, coin)
+    toCTxIn _ = Nothing
 
 convertTxOutputs :: [TxOut] -> [(CAddress, Coin)]
 convertTxOutputs = map (toCAddress . txOutAddress &&& txOutValue)
@@ -426,16 +431,29 @@ toTxBrief txi = CTxBrief {..}
     ctbTimeIssued = timestampToPosix <$> ts
     ctbInputs     = map (fmap (second mkCCoin)) txInputsMB
     ctbOutputs    = map (second mkCCoin) txOutputs
-    ctbInputSum   = sumCoinOfInputsOutputs txInputsMB
-    ctbOutputSum  = sumCoinOfInputsOutputs $ map Just txOutputs
+    ctbInputSum   = sumCoinOfInputsMB txInputsMB
+    ctbOutputSum  = sumCoinOfOutputs $ map Just txOutputs
 
-    txInputsMB    = convertTxOutputsMB $ map (fmap toaOut) $ NE.toList $
-                    teInputOutputs (tiExtra txi)
+    txInputsMB    = convertTxInputOutputsMB (NE.toList $ _txInputs tx) (map (fmap toaOut) $ NE.toList $
+                    teInputOutputs (tiExtra txi))
     txOutputs     = convertTxOutputs . NE.toList $ _txOutputs tx
 
 -- | Sums the coins of inputs and outputs
-sumCoinOfInputsOutputs :: [Maybe (CAddress, Coin)] -> CCoin
-sumCoinOfInputsOutputs addressListMB
+sumCoinOfInputsMB :: [Maybe (CTxId, Int, CAddress, Coin)] -> CCoin
+sumCoinOfInputsMB addressListMB
+    | Just addressList <- sequence addressListMB = do
+        -- Get total number of coins from an address
+        let addressCoins :: (CTxId, Int, CAddress, Coin) -> Integer
+            addressCoins (_,_,_, coin) = coinToInteger coin
+
+        -- Arbitrary precision, so we don't overflow
+        let addressCoinList :: [Integer]
+            addressCoinList = addressCoins <$> addressList
+        mkCCoin $ mkCoin $ fromIntegral $ sum addressCoinList
+    | otherwise = mkCCoinMB Nothing
+
+sumCoinOfOutputs :: [Maybe (CAddress, Coin)] -> CCoin
+sumCoinOfOutputs addressListMB
     | Just addressList <- sequence addressListMB = do
         -- Get total number of coins from an address
         let addressCoins :: (CAddress, Coin) -> Integer
@@ -446,6 +464,7 @@ sumCoinOfInputsOutputs addressListMB
             addressCoinList = addressCoins <$> addressList
         mkCCoin $ mkCoin $ fromIntegral $ sum addressCoinList
     | otherwise = mkCCoinMB Nothing
+
 
 newtype CByteString = CByteString ByteString
     deriving (Generic)

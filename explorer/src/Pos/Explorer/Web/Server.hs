@@ -91,7 +91,7 @@ import           Pos.Explorer.Web.ClientTypes (Byte, CAda (..), CAddress (..),
                      CGenesisAddressInfo (..), CGenesisSummary (..), CHash,
                      CTxBrief (..), CTxEntry (..), CTxId (..), CTxSummary (..),
                      CUtxo (..), TxInternal (..), convertTxOutputs,
-                     convertTxOutputsMB, fromCAddress, fromCHash, fromCTxId,
+                     convertTxInputOutputsMB, fromCAddress, fromCHash, fromCTxId,
                      getEpochIndex, getSlotIndex, mkCCoin, mkCCoinMB,
                      tiToTxEntry, toBlockEntry, toBlockSummary, toCAddress,
                      toCHash, toCTxId, toTxBrief)
@@ -455,6 +455,8 @@ getTxRaw cTxId = do
         taTx <$> (fetchTxFromMempoolOrFail txId')
 
 
+
+
 -- | Get transaction summary from transaction id. Looks at both the database
 -- and the memory (mempool) for the transaction. What we have at the mempool
 -- are transactions that have to be written in the blockchain.
@@ -535,7 +537,7 @@ getTxSummary cTxId = do
             , ctsTotalInput      = mkCCoinMB totalInputMB
             , ctsTotalOutput     = mkCCoin totalOutput
             , ctsFees            = mkCCoinMB $ (`unsafeSubCoin` totalOutput) <$> totalInputMB
-            , ctsInputs          = map (fmap (second mkCCoin)) $ convertTxOutputsMB inputOutputsMB
+            , ctsInputs          = map(Just . second mkCCoin) $ convertTxInputOutputsMB (NE.toList $ _txInputs tx) inputOutputsMB
             , ctsOutputs         = map (second mkCCoin) txOutputs
             }
 
@@ -570,7 +572,7 @@ getTxSummary cTxId = do
             , ctsTotalInput      = mkCCoin totalInput
             , ctsTotalOutput     = mkCCoin totalOutput
             , ctsFees            = mkCCoin $ unsafeSubCoin totalInput totalOutput
-            , ctsInputs          = map (Just . second mkCCoin) $ convertTxOutputs inputOutputs
+            , ctsInputs          = map (Just . second mkCCoin) $ convertTxInputOutputsMB (NE.toList $ _txInputs tx) (map Just inputOutputs)
             , ctsOutputs         = map (second mkCCoin) txOutputs
             }
 
