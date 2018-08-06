@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns": ["connect-explorer-to-mainnet", "connect-to-mainnet", "cardano-sl-1.0", ".stack-work", ".git", "state-wallet-mainnet", "state-explorer-mainnet"]
+		}
+	]
+}

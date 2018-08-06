@@ -1,0 +1,1380 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"JSO",
+				"JsonByteString"
+			],
+			[
+				"debug",
+				"debugTrace"
+			],
+			[
+				"cA",
+				"cAddrToAddr"
+			],
+			[
+				"cAdd",
+				"cAddrs"
+			],
+			[
+				"getAdd",
+				"getAddressSummary"
+			],
+			[
+				"mkC",
+				"mkCTxId"
+			],
+			[
+				"NE",
+				"NonEmpty"
+			],
+			[
+				"format",
+				"formatUtxo"
+			],
+			[
+				"loc",
+				"local_portfolio"
+			],
+			[
+				"reque",
+				"requested_funds"
+			],
+			[
+				"sm",
+				"smtp_connection"
+			],
+			[
+				"data",
+				"data_to_insert"
+			],
+			[
+				"ex",
+				"external_reference"
+			],
+			[
+				"tran",
+				"transaction_meta"
+			],
+			[
+				"excha",
+				"exchanges"
+			],
+			[
+				"get",
+				"get_actual_order_cost"
+			],
+			[
+				"sen",
+				"sendAmountFieldValue"
+			],
+			[
+				"enc",
+				"encryptDerivationPath"
+			],
+			[
+				"ser",
+				"serializedDerivationPath"
+			],
+			[
+				"mne",
+				"mnemonicToHashSeed"
+			],
+			[
+				"fee",
+				"feeValidator"
+			],
+			[
+				"sendAdd",
+				"sendAddressValidator"
+			],
+			[
+				"val",
+				"validationError"
+			],
+			[
+				"sendAmoun",
+				"sendAmountForTransactionFee"
+			],
+			[
+				"transactionFee",
+				"sendAmountForTransactionFee"
+			],
+			[
+				"i",
+				"iterations"
+			],
+			[
+				"mem",
+				"memoizeAsync"
+			],
+			[
+				"memo",
+				"memoizeSync"
+			],
+			[
+				"roo",
+				"rootSecretString"
+			],
+			[
+				"metas",
+				"metasAndAdrresses"
+			],
+			[
+				"do",
+				"do"
+			],
+			[
+				"dsr",
+				"dstAccountAddress"
+			],
+			[
+				"meta",
+				"metasAndAdrresses"
+			],
+			[
+				"Account",
+				"AccountMoneySource"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "client/src/Pos/Client/Txp/Util.hs",
+			"settings":
+			{
+				"buffer_size": 28954,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "explorer/src/Pos/Explorer/Web.hs",
+			"settings":
+			{
+				"buffer_size": 199,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "explorer/src/Pos/Explorer/Web/Server.hs",
+			"settings":
+			{
+				"buffer_size": 36877,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 1827 files for \"data Tx\" (case sensitive)\n\n/home/rafael/git_veci/cardanolite-sl/cardano-sl-explorer-static:\n    ERROR: Unable to open file\n\n/home/rafael/git_veci/cardanolite-sl/auxx/src/Command/Tx.hs:\n   74  --\n   75  -- This is used in the benchmarks using send-to-all-genesis\n   76: data TxCount = TxCount\n   77      { _txcSubmitted :: !Int\n   78        -- How many threads are still sending transactions.\n\n/home/rafael/git_veci/cardanolite-sl/client/src/Pos/Client/Txp/History.hs:\n   75  \n   76  -- | Datatype for returning info about tx history\n   77: data TxHistoryEntry = THEntry\n   78      { _thTxId        :: !TxId\n   79      , _thTx          :: !Tx\n\n/home/rafael/git_veci/cardanolite-sl/client/src/Pos/Client/Txp/Util.hs:\n  105  \n  106  -- This datatype corresponds to raw transaction.\n  107: data TxRaw = TxRaw\n  108      { trInputs         :: !(TxOwnedInputs TxOut)\n  109      -- ^ Selected inputs from Utxo\n  ...\n  114      } deriving (Show)\n  115  \n  116: data TxError =\n  117        NotEnoughMoney !Coin\n  118        -- ^ Parameter: how much more money is needed\n  ...\n  225  -- | Datatype which contains all data from DB which is necessary\n  226  -- to create transactions\n  227: data TxCreatorData = TxCreatorData\n  228      { _tcdFeePolicy            :: !TxFeePolicy\n  229      , _tcdInputSelectionPolicy :: !InputSelectionPolicy\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Common/TxFeePolicy.hs:\n   31  -- be added. To make this future-proof, we also have an \"unknown\" policy used\n   32  -- by older node versions (the ones that haven't updated yet).\n   33: data TxFeePolicy\n   34      = TxFeePolicyTxSizeLinear !TxSizeLinear\n   35      | TxFeePolicyUnknown !Word8 !ByteString\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Common/TxSizeLinear.hs:\n   19  -- function where @s@ is the transaction size in bytes, @a@ and @b@ are\n   20  -- constant coefficients.\n   21: data TxSizeLinear = TxSizeLinear !Coeff !Coeff\n   22      deriving (Eq, Ord, Show, Generic)\n   23  \n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/Tx.hs:\n   56  --\n   57  -- NB: transaction witnesses are stored separately.\n   58: data Tx = UnsafeTx\n   59      { _txInputs     :: !(NonEmpty TxIn)  -- ^ Inputs of transaction.\n   60      , _txOutputs    :: !(NonEmpty TxOut) -- ^ Outputs of transaction.\n   ..\n  142  \n  143  -- | Transaction arbitrary input.\n  144: data TxIn\n  145        -- | TxId = Which transaction's output is used\n  146        -- | Word32 = Index of the output in transaction's outputs\n  ...\n  212  \n  213  -- | Transaction output.\n  214: data TxOut = TxOut\n  215      { txOutAddress :: !Address\n  216      , txOutValue   :: !Coin\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxAux.hs:\n   19  \n   20  -- | Transaction + auxiliary data\n   21: data TxAux = TxAux\n   22      { taTx      :: !Tx\n   23      , taWitness :: !TxWitness\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxOutAux.hs:\n   15  -- | Transaction output and auxilary data corresponding to it.\n   16  -- [CSL-366] Add more data.\n   17: data TxOutAux = TxOutAux\n   18      { toaOut   :: !TxOut\n   19      -- ^ Tx output\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxPayload.hs:\n   21  -- is unsafe, because it lets one create invalid payload, for example\n   22  -- with different number of transactions and witnesses.\n   23: data TxPayload = UnsafeTxPayload\n   24      { -- | Transactions are the main payload.\n   25        _txpTxs       :: ![Tx]\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxProof.hs:\n   18  import           Pos.Core.Txp.TxWitness\n   19  \n   20: data TxProof = TxProof\n   21      { txpNumber        :: !Word32\n   22      , txpRoot          :: !(MerkleRoot Tx)\n\n/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxWitness.hs:\n   37  \n   38  -- | A witness for a single input.\n   39: data TxInWitness\n   40      -- PkWitness twKey twSig\n   41      = PkWitness !PublicKey !TxSig\n   ..\n  149  \n  150  -- | Data that is being signed when creating a TxSig.\n  151: data TxSigData = TxSigData\n  152      { -- | Transaction that we're signing\n  153        txSigTxHash      :: !(Hash Tx)\n\n/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Txp/Settings.hs:\n   48  type TxpBlund = (TxpBlock, TxpUndo)\n   49  \n   50: data TxpGlobalSettings = TxpGlobalSettings\n   51      { -- | Verify a chain of payloads from blocks and return txp undos\n   52        -- for each payload.\n\n/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Txp/MemState/Class.hs:\n   43  import           System.Wlog (NamedPureLogger, WithLogger, launchNamedPureLog)\n   44  \n   45: data TxpHolderTag\n   46  \n   47  -- | More general version of @MonadReader (GenericTxpLocalData mw) m@.\n\n/home/rafael/git_veci/cardanolite-sl/docs/block-processing/txp.md:\n   81    ```\n   82    type TxId = Hash Tx\n   83:   data TxOut = TxOut\n   84       { txOutAddress :: !Address\n   85       , txOutValue   :: !Coin\n   86       }\n   87:   data TxIn\n   88       = TxInUtxo\n   89       { -- | Which transaction's output is used\n   ..\n   94       | TxInUnknown !Word8 !ByteString\n   95  \n   96:   data TxOutAux = TxOutAux\n   97       { toaOut   :: !TxOut\n   98       -- ^ Tx output\n\n/home/rafael/git_veci/cardanolite-sl/docs/block-processing/types.md:\n  337  \n  338  ```haskell\n  339: data TxPayload = UnsafeTxPayload\n  340      { _txpTxs       :: MerkleTree Tx         -- transactions\n  341      , _txpWitnesses :: [TxWitness]           -- witnesses\n  ...\n  358  \n  359  ```haskell\n  360: data TxProof = TxProof\n  361      { txpNumber        :: Word32             -- number of transactions\n  362      , txpRoot          :: MerkleRoot Tx      -- root of the transaction tree\n  ...\n  481  \n  482  ```haskell\n  483: data Tx = UnsafeTx\n  484      { _txInputs     :: NonEmpty TxIn         -- inputs\n  485      , _txOutputs    :: NonEmpty TxOut        -- outputs\n  ...\n  506  \n  507  ```haskell\n  508: data TxIn\n  509      = TxInUtxo                      -- an output of some other transaction\n  510          { txInHash  :: TxId\n  ...\n  517  \n  518  ```haskell\n  519: data TxOut = TxOut\n  520      { txOutAddress :: Address  -- the owner of the output\n  521      , txOutValue   :: Coin     -- amount of money\n  ...\n  669  \n  670  ```haskell\n  671: data TxInWitness\n  672  \n  673      = PkWitness\n  ...\n  696      type TxSig = Signature TxSigData\n  697     \n  698:     data TxSigData = TxSigData\n  699          { txSigTxHash :: Hash Tx\n  700          }\n\n/home/rafael/git_veci/cardanolite-sl/docs/tx/processing.md:\n  103    ```\n  104    type TxId = Hash Tx\n  105:   data TxOut = TxOut\n  106       { txOutAddress :: !Address\n  107       , txOutValue   :: !Coin\n  108       }\n  109:   data TxIn\n  110       = TxInUtxo\n  111       { -- | Which transaction's output is used\n  ...\n  116       | TxInUnknown !Word8 !ByteString\n  117  \n  118:   data TxOutAux = TxOutAux\n  119       { toaOut   :: !TxOut\n  120       -- ^ Tx output\n\n/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Core/Types.hs:\n   15  type AddrHistory = NewestFirst [] TxId\n   16  \n   17: data TxExtra = TxExtra\n   18      { teBlockchainPlace :: !(Maybe (HeaderHash, Word32))\n   19      , teReceivedTime    :: !(Maybe Timestamp)\n\n/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web/ClientTypes.hs:\n  398  --------------------------------------------------------------------------------\n  399  \n  400: data TxInternal = TxInternal\n  401      { tiExtra :: !TxExtra\n  402      , tiTx    :: !Tx\n\n/home/rafael/git_veci/cardanolite-sl/generator/src/Pos/Generator/Block/Param.hs:\n   22  \n   23  -- | Parameters for transactions payload generation.\n   24: data TxGenParams = TxGenParams\n   25      { _tgpTxCountRange :: !(Word, Word)\n   26      -- ^ Such (a, d), that there block will include some x ∈ [a, a+d)\n\n/home/rafael/git_veci/cardanolite-sl/tools/src/post-mortem/Statistics/Block.hs:\n  116      f m cs = [(bhNode, bhTimestamp, bhTxCnt) | (_, BlockHeader{..}) <- MS.toList m, bhHash `S.member` cs]\n  117  \n  118: data TxFate =\n  119        InNoBlock\n  120      | InBlockChain !Timestamp !BlockHash !(Set (Timestamp, BlockHash))\n\n/home/rafael/git_veci/cardanolite-sl/txp/src/Pos/Txp/Configuration.hs:\n   30  \n   31  -- | Delegation configruation part.\n   32: data TxpConfiguration = TxpConfiguration\n   33      { -- | Limit on the number of transactions that can be stored in\n   34        -- the mem pool.\n\n/home/rafael/git_veci/cardanolite-sl/txp/src/Pos/Txp/Error.hs:\n   13                       cardanoExceptionToException)\n   14  \n   15: data TxpError\n   16      = TxpInternalError !Text\n   17      -- ^ Something bad happened inside Txp\n\n/home/rafael/git_veci/cardanolite-sl/txp/src/Pos/Txp/Toil/Failure.hs:\n  168  \n  169  -- | Result of checking transaction output.\n  170: data TxOutVerFailure\n  171      -- | Not all attributes for the output are known\n  172      = TxOutUnknownAttributes Address\n\n/home/rafael/git_veci/cardanolite-sl/wallet-new/src/Cardano/Wallet/Kernel/DB/Sqlite.hs:\n   83  \n   84  --}\n   85: data TxMetaT f = TxMeta {\n   86        _txMetaTableId         :: Beam.Columnar f Core.TxId\n   87      , _txMetaTableAmount     :: Beam.Columnar f Core.Coin\n   ..\n  134  --}\n  135  \n  136: data TxCoinDistributionTableT f = TxCoinDistributionTable {\n  137        _txCoinDistributionTableAddress :: Beam.Columnar f Core.Address\n  138      , _txCoinDistributionTableCoin    :: Beam.Columnar f Core.Coin\n\n/home/rafael/git_veci/cardanolite-sl/wallet-new/src/Cardano/Wallet/Kernel/DB/TxMeta/Types.hs:\n   60  -- NOTE: This does /not/ live in the acid-state database (and consequently\n   61  -- does not need a 'SafeCopy' instance), because this will grow without bound.\n   62: data TxMeta = TxMeta {\n   63        -- | Transaction ID\n   64        _txMetaId         :: Core.TxId\n   ..\n  143  -- | A domain-specific collection of things which might go wrong when\n  144  -- storing & retrieving 'TxMeta' from a persistent storage.\n  145: data TxMetaStorageError =\n  146        InvariantViolated InvariantViolation\n  147      -- ^ One of the invariant was violated.\n\n/home/rafael/git_veci/cardanolite-sl/wallet-new/test/unit/InputSelection/TxStats.hs:\n   29  -- to monitor these statistics and learn something about the wallet as it\n   30  -- operates in reality.\n   31: data TxStats = TxStats {\n   32        -- | Number of inputs\n   33        --\n\n43 matches across 26 files\n",
+			"settings":
+			{
+				"buffer_size": 10395,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		}
+	],
+	"build_system": "Packages/Haskell/Haskell.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Haskell/Haskell.sublime-build",
+					""
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					""
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Haskell/Haskell.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 154.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Add Channel"
+			]
+		],
+		"width": 479.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/rafael/git_veci/cardanolite-sl",
+		"/home/rafael/git_veci/cardanolite-sl/db",
+		"/home/rafael/git_veci/cardanolite-sl/db/src",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Txp",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Txp/Logic",
+		"/home/rafael/git_veci/cardanolite-sl/wallet"
+	],
+	"file_history":
+	[
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Functions.hs",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/GState/Common.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/DB.hs",
+		"/home/rafael/git_veci/cardanolite-sl/client/src/Pos/Client/Txp/History.hs",
+		"/home/rafael/git_veci/cardanolite-sl/auxx/src/Command/Tx.hs",
+		"/home/rafael/git_veci/cardanolite-sl/auxx/src/Command/Proc.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxOutAux.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/Undo.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Core/Types.hs",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Txp/Logic/Global.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/documentation/Main.hs",
+		"/home/rafael/git_veci/cardanolite-sl/.gitignore",
+		"/home/rafael/git_veci/cardanolite-sl/.dockerignore",
+		"/home/rafael/git_veci/cardanolite-sl/Dockerfile",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Mode.hs",
+		"/home/rafael/git_veci/cardanolite-sl/db/src/Pos/DB/Txp/Utxo.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/Tx.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Aeson/ClientTypes.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web/ClientTypes.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web/Server.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/src/Cardano/Wallet/Kernel/PrefilterTx.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Txp/Toil/Logic.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/frontend/src/Explorer/Update.purs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Socket/App.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Socket/Methods.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web/TestServer.hs",
+		"/home/rafael/git_veci/cardanolite-sl/client/src/Pos/Client/Txp/Balances.hs",
+		"/home/rafael/git_veci/cardanolite-sl/client/src/Pos/Client/Txp/Network.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web/Api.hs",
+		"/home/rafael/git_veci/cardanolite-sl/release.nix",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/test/Test/Pos/Util/MnemonicsSpec.hs",
+		"/home/rafael/git_veci/cardanolite-sl/auxx/Main.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/Web/Api.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/cardano-sl.cabal",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Methods/Logic.hs",
+		"/home/rafael/git_veci/cardanolite-sl/docs/how-to/build-cardano-sl-and-daedalus-from-source-code.md",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/src/Cardano/Wallet/API/V1/Types.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Swagger/Instances/Schema.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/cardano-sl-explorer.cabal",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Util/BackupPhrase.hs",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto/Orphans.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Aeson/Core.hs",
+		"/home/rafael/git_veci/cardanolite-sl/txp/src/Pos/Txp/DB/Utxo.hs",
+		"/home/rafael/git_veci/cardanolite-sl/docs/block-processing/txp.md",
+		"/home/rafael/git_veci/cardanolite-sl/client/src/Pos/Client/Txp/Util.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/ClientTypes/Functions.hs",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto/HD.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Common/Address.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Methods.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Api.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/integration/Functions.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Account.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Server/Handlers.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/ClientTypes/Instances.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/cardano-sl-wallet-new.cabal",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto/Signing/Types/Safe.hs",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto/Scrypt.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/test/MarshallingSpec.hs",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto/Signing/Safe.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Util/Mnemonics.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Aeson/Core/Configuration.hs",
+		"/home/rafael/git_veci/cardanolite-sl/docs/tx/processing.md",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Util.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Methods/History.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/.stack-work/dist/x86_64-linux-nix/Cabal-1.24.2.0/setup-config",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/cardano-sl-wallet.cabal",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/bench/Client/Cardano/Wallet/Web/Api.hs",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto.hs",
+		"/home/rafael/git_veci/cardanolite-sl/crypto/Pos/Crypto/Signing/Types/Signing.hs",
+		"/home/rafael/Desktop/cardano.log",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/ClientTypes/Types.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/Binary.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/src/Cardano/Wallet/Server.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/Web/Server.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Server.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/test/Test/Pos/Core/Gen.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxPayload.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib.nix",
+		"/home/rafael/git_veci/cardanolite-sl/txp/test/Test/Pos/Txp/Arbitrary.hs",
+		"/home/rafael/git_veci/cardanolite-sl/tools/src/dbgen/Lib.hs",
+		"/home/rafael/git_veci/cardanolite-sl/txp/src/Pos/Aeson/Txp.hs",
+		"/home/rafael/git_veci/cardanolite-sl/connect-wallet-to-mainnet",
+		"/home/rafael/git_veci/cardanolite-sl/scripts/launch/demo.sh",
+		"/home/rafael/git_veci/cardanolite-sl/docs/tls-authentication.md",
+		"/home/rafael/git_veci/cardanolite-sl/scripts/launch/daedalus-example.sh",
+		"/home/rafael/git_veci/cardanolite-sl/core/test/Test/Pos/Core/AddressSpec.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Aeson/WalletBackup.hs",
+		"/home/rafael/git_veci/cardanolite-sl/docs/proposals/csl-2104-crypto-scheme-changes-in-address.md",
+		"/home/rafael/git_veci/cardanolite-sl/pkgs/default.nix",
+		"/home/rafael/git_veci/cardanolite-sl/scripts/launch/demo-with-wallet-api.sh",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Block/Genesis/Lens.hs",
+		"/home/rafael/git_veci/cardanolite-sl/benchmarks/plots.r",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp/TxAux.hs",
+		"/home/rafael/git_veci/cardanolite-sl/util/test/Test/Pos/Util/Base16.hs",
+		"/home/rafael/git_veci/cardanolite-sl/auxx/src/Command/Update.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Common/SharedSeed.hs",
+		"/home/rafael/git_veci/cardanolite-sl/binary/src/Pos/Binary/Class/Primitive.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Genesis/Canonical.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/configuration.yaml",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/Configuration.hs",
+		"/home/rafael/git_veci/cardanolite-sl/README.md",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Configuration.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/Launcher/Configuration.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/ExplorerMode.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/WorkMode/Class.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/Web/Error.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/src/Pos/Explorer/ExtraContext.hs",
+		"/nix/store/39p2dbldbxzhk4278b0rkhg417bgcrzk-cardano-config/configuration.yaml",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Methods/Payment.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/node/Main.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet/src/Pos/Wallet/Web/Pending/Worker.hs",
+		"/home/rafael/git_veci/cardanolite-sl/lib/src/Pos/WorkMode.hs",
+		"/home/rafael/git_veci/cardano-sl/state-wallet-mainnet/wallet-db/Archive/checkpoints-0000000279.log",
+		"/home/rafael/git_veci/cardanolite-sl/core/src/Pos/Core/Txp.hs",
+		"/home/rafael/git_veci/cardanolite-sl/txp/Pos/Aeson/Txp.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/frontend/src/Explorer/Update.Test.purs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/test/Test.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/test/Test/Pos/Explorer/Web/ClientTypesSpec.hs",
+		"/home/rafael/git_veci/cardanolite-sl/explorer/README.md",
+		"/home/rafael/git_veci/cardanolite-sl/txp/Pos/Txp/DB/Utxo.hs",
+		"/home/rafael/git_veci/cardanolite-sl/wallet-new/server/Cardano/Wallet/API/V1/Swagger/Example.hs",
+		"/home/rafael/git_veci/cardanolite-sl/txp/Pos/Txp/Toil/Types.hs",
+		"/home/rafael/git_veci/cardanolite-sl/txp/Pos/Txp/Toil/Logic.hs",
+		"/home/rafael/git_veci/cardanolite-sl/core/Pos/Core/Txp.hs",
+		"/home/rafael/git_veci/cardanolite-sl/docs/tx/binary-format.md",
+		"/home/rafael/git_veci/cardanolite-sl/docs/block-processing/types.md"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 107.0,
+		"where_history":
+		[
+			"",
+			"/home/rafael/git_veci/cardanolite-sl",
+			"/home/rafael/git_veci/cardanolite-sl/wallet,/home/rafael/git_veci/cardanolite-sl",
+			"/home/rafael/git_veci/cardanolite-sl/wallet,/home/rafael/git_veci/cardanolite-sl/wallet-new",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"data Tx",
+			"TxUndo",
+			"TxExtra",
+			"dbGet",
+			"dbGetBi",
+			"gsGetBi",
+			"addrHistoryKey",
+			"txExtraPrefix",
+			"TxExtra",
+			"data TxExtra",
+			"getTxExtra",
+			"getTxExtraOrFail",
+			"CAddressSumma",
+			"TxIn",
+			"TxOut",
+			"data TxOut",
+			"data TxOutAux",
+			"type TxUndo",
+			"tyep TxUndo",
+			"data TxUndo",
+			"TxUndo",
+			"data TxExtra",
+			"getTxExtraOrFail",
+			"CAddressSummary",
+			"txHistory",
+			"groupUtxo",
+			"utxo",
+			"addrBelongsToSet",
+			"Rocks",
+			"cl",
+			"runConduitRes",
+			"getAllPotentiallyHugeUtxo",
+			"getFilteredUtxo",
+			"getOwnUtxos",
+			"getOwnUtxoForPk",
+			"utxo",
+			"CTxEntry",
+			"TxsUpdated",
+			"SubTx",
+			"utxo",
+			"updateUtxoSumFromBalanceUpdate",
+			"BalanceUpdate",
+			"updateUtxoSumFromBalanceUpdate",
+			"updateUtxoSum",
+			"dbGetBi",
+			"gsGetBi",
+			"utxoSumPrefix",
+			"e/epochs/",
+			"UtxoSummaryRaw",
+			"utxosum",
+			"utxoSumPrefix",
+			"getUtxoSum",
+			"utxoSumPrefix",
+			"gsGetBi",
+			"getAddrBalance",
+			"getLocalTxs",
+			"getFilteredUtxo",
+			"AddTxOut",
+			"UtxoOp",
+			"getFilteredUtxo",
+			"getFil",
+			"getFilter",
+			"getFilteredUtxo",
+			"utxo",
+			"<<<<<",
+			"txOutAddress",
+			"<<<<",
+			"explorerExtendedApi",
+			"when (not ",
+			"<<<<",
+			"<<<",
+			"<<<<",
+			"<<<",
+			"<<<<<",
+			"CByteS",
+			"ByteStr",
+			"<<<<",
+			"ByteStr",
+			"ByteStri",
+			"CByteS",
+			"NamedS",
+			"cardano-explorer-swagger",
+			"doc",
+			"swagger",
+			"Generic Micro",
+			"Micro",
+			"ToSchem",
+			"instance Generic",
+			"CTxEntry",
+			"genericDeclareNamedSchemaUnrestricted",
+			"GenericHasSimpleShape",
+			"CAddressesFilter",
+			"_txsRaw",
+			"<<<<<",
+			"CByte",
+			"<<<<",
+			"raw",
+			"<<<<<",
+			"ByteStr",
+			"_txsRaw",
+			"Utxo",
+			"ByteSt",
+			"ByteString",
+			"ToSchema",
+			"yarn",
+			"ToString Byte",
+			"instance toJSON",
+			"toStr",
+			"ToJSON",
+			"instance toString",
+			"_txsRaw",
+			"raw",
+			"testTxsRaw",
+			"_txsRaw",
+			"getTxRaw",
+			"serialize'",
+			"ByteString",
+			"toString ByteString",
+			"ByteString",
+			"ByteSt",
+			"<<<<<",
+			"serializ",
+			"<<<<",
+			"toString",
+			"ByteSt",
+			"data CUtxo",
+			"utxo",
+			"serialize"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "client/src/Pos/Client/Txp/Util.hs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 28954,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14160,
+								14160
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Haskell/Haskell.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5536.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "explorer/src/Pos/Explorer/Web.hs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 199,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Haskell/Haskell.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "explorer/src/Pos/Explorer/Web/Server.hs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 36877,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								32603,
+								32603
+							]
+						],
+						"settings":
+						{
+							"SL.73.region_keys":
+							[
+							],
+							"syntax": "Packages/Haskell/Haskell.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12690.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10395,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										295,
+										302
+									],
+									[
+										566,
+										573
+									],
+									[
+										812,
+										819
+									],
+									[
+										979,
+										986
+									],
+									[
+										1205,
+										1212
+									],
+									[
+										1598,
+										1605
+									],
+									[
+										1916,
+										1923
+									],
+									[
+										2159,
+										2166
+									],
+									[
+										2393,
+										2400
+									],
+									[
+										2588,
+										2595
+									],
+									[
+										2806,
+										2813
+									],
+									[
+										3077,
+										3084
+									],
+									[
+										3381,
+										3388
+									],
+									[
+										3637,
+										3644
+									],
+									[
+										3882,
+										3889
+									],
+									[
+										4058,
+										4065
+									],
+									[
+										4305,
+										4312
+									],
+									[
+										4636,
+										4643
+									],
+									[
+										4859,
+										4866
+									],
+									[
+										4976,
+										4983
+									],
+									[
+										5131,
+										5138
+									],
+									[
+										5319,
+										5326
+									],
+									[
+										5524,
+										5531
+									],
+									[
+										5748,
+										5755
+									],
+									[
+										5931,
+										5938
+									],
+									[
+										6097,
+										6104
+									],
+									[
+										6277,
+										6284
+									],
+									[
+										6397,
+										6404
+									],
+									[
+										6593,
+										6600
+									],
+									[
+										6710,
+										6717
+									],
+									[
+										6865,
+										6872
+									],
+									[
+										7090,
+										7097
+									],
+									[
+										7417,
+										7424
+									],
+									[
+										7664,
+										7671
+									],
+									[
+										8028,
+										8035
+									],
+									[
+										8273,
+										8280
+									],
+									[
+										8556,
+										8563
+									],
+									[
+										8793,
+										8800
+									],
+									[
+										9033,
+										9040
+									],
+									[
+										9221,
+										9228
+									],
+									[
+										9702,
+										9709
+									],
+									[
+										9959,
+										9966
+									],
+									[
+										10291,
+										10298
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 90.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 36.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 108.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "cardanolite-sl.sublime-project",
+	"replace":
+	{
+		"height": 44.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"server.",
+				"explorer/src/Pos/Explorer/Web/Server.hs"
+			],
+			[
+				"web",
+				"explorer/src/Pos/Explorer/Web.hs"
+			],
+			[
+				"testse",
+				"explorer/src/Pos/Explorer/Web/TestServer.hs"
+			],
+			[
+				"api.hs",
+				"explorer/src/Pos/Explorer/Web/Api.hs"
+			],
+			[
+				"releas",
+				"release.nix"
+			],
+			[
+				"server.hs",
+				"explorer/src/Pos/Explorer/Web/Server.hs"
+			],
+			[
+				"clientty",
+				"explorer/src/Pos/Explorer/Web/ClientTypes.hs"
+			],
+			[
+				"docummain",
+				"explorer/src/documentation/Main.hs"
+			],
+			[
+				"main",
+				"auxx/Main.hs"
+			],
+			[
+				"clientt",
+				"explorer/src/Pos/Explorer/Aeson/ClientTypes.hs"
+			],
+			[
+				"api",
+				"explorer/src/Pos/Explorer/Web/Api.hs"
+			],
+			[
+				"api.",
+				"lib/src/Pos/Web/Api.hs"
+			],
+			[
+				"cabal",
+				"lib/cardano-sl.cabal"
+			],
+			[
+				"rele",
+				"release.nix"
+			],
+			[
+				"clienttyp",
+				"explorer/src/Pos/Explorer/Web/ClientTypes.hs"
+			],
+			[
+				"documenmain",
+				"explorer/src/documentation/Main.hs"
+			],
+			[
+				"aeson clien",
+				"explorer/src/Pos/Explorer/Aeson/ClientTypes.hs"
+			],
+			[
+				"mnemo",
+				"wallet/src/Pos/Util/Mnemonics.hs"
+			],
+			[
+				"mnemoni",
+				"wallet/src/Pos/Util/Mnemonics.hs"
+			],
+			[
+				"backup",
+				"wallet/src/Pos/Util/BackupPhrase.hs"
+			],
+			[
+				"function",
+				"wallet-new/integration/Functions.hs"
+			],
+			[
+				"mnemonic",
+				"wallet/src/Pos/Util/Mnemonics.hs"
+			],
+			[
+				"scrypt",
+				"crypto/Pos/Crypto/Scrypt.hs"
+			],
+			[
+				".cabal",
+				"wallet/cardano-sl-wallet.cabal"
+			],
+			[
+				"account.",
+				"wallet/src/Pos/Wallet/Web/Account.hs"
+			],
+			[
+				"web methods",
+				"wallet/src/Pos/Wallet/Web/Methods.hs"
+			],
+			[
+				"wallet Logic",
+				"wallet/src/Pos/Wallet/Web/Methods/Logic.hs"
+			],
+			[
+				"wallet method",
+				"wallet/src/Pos/Wallet/Web/Methods.hs"
+			],
+			[
+				"server han",
+				"wallet/src/Pos/Wallet/Web/Server/Handlers.hs"
+			],
+			[
+				"Binary",
+				"lib/src/Pos/Binary.hs"
+			],
+			[
+				"scrypt.",
+				"crypto/Pos/Crypto/Scrypt.hs"
+			],
+			[
+				"explorerserver.hs",
+				"explorer/src/Pos/Explorer/Web/Server.hs"
+			],
+			[
+				"web.",
+				"explorer/src/Pos/Explorer/Web.hs"
+			],
+			[
+				"Scrypt",
+				"crypto/Pos/Crypto/Scrypt.hs"
+			],
+			[
+				"demo.",
+				"scripts/launch/demo.sh"
+			],
+			[
+				"demo-with-wallet-api.sh",
+				"scripts/launch/demo-with-wallet-api.sh"
+			],
+			[
+				"testser",
+				"explorer/src/Pos/Explorer/Web/TestServer.hs"
+			],
+			[
+				"Txp.hs",
+				"core/src/Pos/Core/Txp/TxPayload.hs"
+			],
+			[
+				"Tx",
+				"core/src/Pos/Core/Txp/Tx.hs"
+			],
+			[
+				"safe.",
+				"crypto/Pos/Crypto/Signing/Safe.hs"
+			],
+			[
+				".ca",
+				"explorer/cardano-sl-explorer.cabal"
+			],
+			[
+				"lib.ni",
+				"lib.nix"
+			],
+			[
+				"configu",
+				"lib/src/Pos/Configuration.hs"
+			],
+			[
+				"config",
+				"lib/src/Pos/Configuration.hs"
+			],
+			[
+				"explorer server.hs",
+				"explorer/src/Pos/Explorer/Web/Server.hs"
+			],
+			[
+				"explorer web api",
+				"explorer/src/Pos/Explorer/Web/Api.hs"
+			],
+			[
+				"configuration.yam",
+				"lib/configuration.yaml"
+			],
+			[
+				"conne",
+				"~/git_veci/cardanolite-sl/connect-explorer-to-mainnet"
+			],
+			[
+				"config.yaml",
+				"lib/configuration.yaml"
+			],
+			[
+				"configuration.hs",
+				"lib/src/Pos/Configuration.hs"
+			],
+			[
+				"test.hs",
+				"explorer/test/Test.hs"
+			],
+			[
+				"swagg",
+				"wallet-new/server/Cardano/Wallet/API/V1/Swagger/Example.hs"
+			],
+			[
+				"documenmain.",
+				"explorer/src/documentation/Main.hs"
+			],
+			[
+				"ClientTypes",
+				"explorer/src/Pos/Explorer/Web/ClientTypes.hs"
+			],
+			[
+				"documentation",
+				"explorer/src/documentation/Main.hs"
+			],
+			[
+				"testSer",
+				"explorer/src/Pos/Explorer/Web/TestServer.hs"
+			],
+			[
+				"aeson client",
+				"explorer/src/Pos/Explorer/Aeson/ClientTypes.hs"
+			],
+			[
+				"notifi",
+				"etfbalancer/tasks/notifier.py"
+			],
+			[
+				"sett",
+				"etfbalancer/settings.py"
+			],
+			[
+				"migr",
+				"~/git_veci/etf-balancer/migrations/versions/93dcb24084bb_.py"
+			],
+			[
+				"db_",
+				"db_init.py"
+			],
+			[
+				"action",
+				"frontend/actions.js"
+			],
+			[
+				"actions.",
+				"frontend/actions.js"
+			],
+			[
+				"sync-",
+				"node_modules/pbkdf2/lib/sync-browser.js"
+			],
+			[
+				"hash.",
+				"node_modules/eslint-module-utils/hash.js"
+			],
+			[
+				"sha512",
+				"node_modules/sha.js/sha512.js"
+			],
+			[
+				"mnemon",
+				"core/Pos/Util/Mnemonics.hs"
+			],
+			[
+				"paymen",
+				"wallet/src/Pos/Wallet/Web/Methods/Payment.hs"
+			],
+			[
+				"payment",
+				"wallet/src/Pos/Wallet/Web/Methods/Payment.hs"
+			],
+			[
+				"payme",
+				"wallet/src/Pos/Wallet/Web/Methods/Payment.hs"
+			],
+			[
+				"paym",
+				"wallet/src/Pos/Wallet/Web/Methods/Payment.hs"
+			],
+			[
+				"conversation",
+				"infra/Pos/Communication/Conversation.hs"
+			],
+			[
+				"topolo",
+				"scripts/bench/topology/topology3.yaml"
+			],
+			[
+				"hd",
+				"core/Pos/Crypto/HD.hs"
+			],
+			[
+				"resto",
+				"wallet/src/Pos/Wallet/Web/Methods/Restore.hs"
+			],
+			[
+				"pay",
+				"wallet/src/Pos/Wallet/Web/Methods/Payment.hs"
+			],
+			[
+				"addres",
+				"core/Pos/Core/Address.hs"
+			],
+			[
+				"crypto",
+				"core/Pos/Binary/Crypto.hs"
+			],
+			[
+				"accoun",
+				"wallet/src/Pos/Wallet/Web/Account.hs"
+			],
+			[
+				"logic.",
+				"infra/Pos/Shutdown/Logic.hs"
+			],
+			[
+				"user",
+				"node/src/Pos/Util/UserSecret.hs"
+			],
+			[
+				"metho",
+				"infra/Pos/Reporting/Methods.hs"
+			],
+			[
+				"usersecret",
+				"node/src/Pos/Util/UserSecret.hs"
+			],
+			[
+				"keystorage",
+				"node/src/Pos/Wallet/KeyStorage.hs"
+			],
+			[
+				"account",
+				"wallet/src/Pos/Wallet/Web/Account.hs"
+			],
+			[
+				"hashin",
+				"core/Pos/Crypto/Hashing.hs"
+			],
+			[
+				"tag",
+				"core/Pos/Crypto/Signing/Tag.hs"
+			],
+			[
+				"txp",
+				"node/src/Pos/Txp.hs"
+			],
+			[
+				"genesisjson",
+				"node/mainnet-genesis.json"
+			],
+			[
+				"hash",
+				"core/Pos/Crypto/Hashing.hs"
+			],
+			[
+				"mainne",
+				"node/mainnet-genesis.json"
+			],
+			[
+				"mainnet",
+				"mainnet-genesis-stub.json"
+			],
+			[
+				"types.",
+				"core/Pos/Core/Types.hs"
+			],
+			[
+				"hashi",
+				"core/Pos/Crypto/Hashing.hs"
+			],
+			[
+				"cborspec",
+				"node/test/Test/Pos/CborSpec.hs"
+			],
+			[
+				"txp.",
+				"node/src/Pos/Txp.hs"
+			],
+			[
+				".cab",
+				"node/cardano-sl.cabal"
+			],
+			[
+				"test",
+				"explorer/frontend/src/Main.Test.purs"
+			],
+			[
+				"has",
+				"core/Pos/Crypto/Hashing.hs"
+			],
+			[
+				"handle",
+				"wallet/src/Pos/Wallet/Web/Server/Handlers.hs"
+			],
+			[
+				"account.hs",
+				"wallet/src/Pos/Wallet/Web/Account.hs"
+			],
+			[
+				"tx.hs",
+				"node/src/Pos/Communication/Tx.hs"
+			],
+			[
+				"conf.d",
+				"docs/network/topology-configuration.md"
+			],
+			[
+				"tx",
+				"node/src/Pos/Communication/Tx.hs"
+			],
+			[
+				"acco",
+				"wallet/src/Pos/Wallet/Web/Account.hs"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 292.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

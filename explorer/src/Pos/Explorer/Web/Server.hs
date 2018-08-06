@@ -56,7 +56,7 @@ import           Pos.DB.Class (MonadDBRead)
 
 import           Pos.Infra.Diffusion.Types (Diffusion)
 
-import           Pos.Binary.Class (biSize)
+import           Pos.Binary.Class (biSize, serialize')
 import           Pos.Chain.Block (Block, Blund, HeaderHash, MainBlock, Undo,
                      gbHeader, gbhConsensus, mainBlockSlot, mainBlockTxPayload,
                      mcdSlot)
@@ -107,6 +107,7 @@ import qualified Data.Map as M
 import           Pos.Configuration (explorerExtendedApi)
 
 
+
 ----------------------------------------------------------------
 -- Top level functionality
 ----------------------------------------------------------------
@@ -141,6 +142,7 @@ explorerHandlers genesisConfig _diffusion =
         , _blocksTxs          = getBlockTxs genesisHash
         , _txsLast            = getLastTxs
         , _txsSummary         = getTxSummary genesisHash
+        , _txsRaw             = getTxRaw
         , _addressSummary     = getAddressSummary nm genesisHash
         , _addressUtxoBulk    = getAddressUtxoBulk nm
         , _epochPages         = getEpochPage epochSlots
@@ -432,6 +434,44 @@ getAddressUtxoBulk nm cAddrs = do
     }
 
 
+getTxRaw
+    :: ExplorerMode ctx m
+    => CTxId
+    -> m CByteString
+getTxRaw cTxId = do
+    -- There are two places whence we can fetch a transaction: MemPool and DB.
+    -- However, TxExtra should be added in the DB when a transaction is added
+    -- to MemPool. So we start with TxExtra and then figure out whence to fetch
+    -- the rest.
+    txId                   <- cTxIdToTxId cTxId
+    -- Get from database, @TxExtra
+    txExtra                <- getTxExtra txId
+
+    -- If we found @TxExtra@ that means we found something saved on the
+    -- blockchain and we don't have to fetch @MemPool@. But if we don't find
+    -- anything on the blockchain, we go searching in the @MemPool@.
+    if isJust txExtra
+      then (CByteString . serialize') <$> (getTxFromBlockchain txId)
+      else (CByteString . serialize') <$> (getTxFromMemPool txId)
+
+  where
+    getTxFromBlockchain
+        :: (ExplorerMode ctx m)
+        => TxId
+        -> m Tx
+    getTxFromBlockchain txId' = do
+        txExtra <- getTxExtraOrFail txId'
+
+        getTxMain txId' txExtra
+
+    getTxFromMemPool
+        :: (ExplorerMode ctx m)
+        => TxId
+        -> m Tx
+    getTxFromMemPool txId' = do
+        taTx <$> (fetchTxFromMempoolOrFail txId')
+
+
 -- | Get transaction summary from transaction id. Looks at both the database
 -- and the memory (mempool) for the transaction. What we have at the mempool
 -- are transactions that have to be written in the blockchain.
@@ -455,6 +495,8 @@ getTxSummary genesisHash cTxId = do
     if isJust txExtra
       then getTxSummaryFromBlockchain cTxId
       else getTxSummaryFromMemPool cTxId
+
+
 
   where
     -- Get transaction from blockchain (the database).
