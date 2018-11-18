@@ -106,8 +106,6 @@ import           Pos.Explorer.Web.Error (ExplorerError (..))
 import qualified Data.Map as M
 import           Pos.Configuration (explorerExtendedApi)
 
-import           Pos.Binary.Class (serialize')
-
 
 
 
