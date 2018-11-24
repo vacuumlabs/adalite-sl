@@ -143,7 +143,7 @@ explorerHandlers genesisConfig _diffusion =
         , _blocksTxs          = getBlockTxs genesisHash
         , _txsLast            = getLastTxs
         , _txsSummary         = getTxSummary genesisHash
-        , _txsRaw             = getTxRaw
+        , _txsRaw             = getTxRaw genesisHash
         , _addressSummary     = getAddressSummary nm genesisHash
         , _addressUtxoBulk    = getAddressUtxoBulk nm
         , _epochPages         = getEpochPage epochSlots
@@ -437,9 +437,10 @@ getAddressUtxoBulk nm cAddrs = do
 
 getTxRaw
     :: ExplorerMode ctx m
-    => CTxId
+    => GenesisHash
+    -> CTxId
     -> m CByteString
-getTxRaw cTxId = do
+getTxRaw genesisHash cTxId = do
     -- There are two places whence we can fetch a transaction: MemPool and DB.
     -- However, TxExtra should be added in the DB when a transaction is added
     -- to MemPool. So we start with TxExtra and then figure out whence to fetch
@@ -452,18 +453,19 @@ getTxRaw cTxId = do
     -- blockchain and we don't have to fetch @MemPool@. But if we don't find
     -- anything on the blockchain, we go searching in the @MemPool@.
     if isJust txExtra
-      then (CByteString . serialize') <$> (getTxFromBlockchain txId)
+      then (CByteString . serialize') <$> (getTxFromBlockchain genesisHash txId)
       else (CByteString . serialize') <$> (getTxFromMemPool txId)
 
   where
     getTxFromBlockchain
         :: (ExplorerMode ctx m)
-        => TxId
+        => GenesisHash
+        -> TxId
         -> m Tx
-    getTxFromBlockchain txId' = do
+    getTxFromBlockchain genesisHash' txId' = do
         txExtra <- getTxExtraOrFail txId'
 
-        getTxMain txId' txExtra
+        getTxMain genesisHash' txId' txExtra
 
     getTxFromMemPool
         :: (ExplorerMode ctx m)
